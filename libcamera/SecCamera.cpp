@@ -308,7 +308,7 @@ static int fimc_v4l2_enum_fmt(int fp, unsigned int fmt)
             found = 1;
             break;
         }
-
+ALOGE("pixfmt %d = %s", fmtdesc.index, fmtdesc.description);
         fmtdesc.index++;
     }
 

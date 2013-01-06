@@ -158,7 +158,7 @@ void CameraHardwareSec::initDefaultParameters(int cameraId)
         p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
               "720x480,640x480,352x288,176x144");
         p.set(CameraParameters::KEY_SUPPORTED_PICTURE_SIZES,
-              "2560x1920,2048x1536,1600x1200,1280x960,640x480");
+              "2048x1536,1600x1200,1280x960,640x480");
     } else {
         p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
               "640x480,320x240,176x144");
@@ -1130,7 +1130,7 @@ int CameraHardwareSec::pictureThread()
     LOG_CAMERA("getSnapshotAndJpeg interval: %lu us", LOG_TIME(1));
 
     if (mSecCamera->getCameraId() == SecCamera::CAMERA_ID_BACK) {
-        isLSISensor = !strncmp((const char*)mCameraSensorName, "S5K4ECGX", 8);
+        isLSISensor = !strncmp((const char*)mCameraSensorName, "S5K5CCGX", 8);
         if(isLSISensor) {
             ALOGI("== Camera Sensor Detect %s - Samsung LSI SOC 5M ==\n", mCameraSensorName);
             // LSI 5M SOC
