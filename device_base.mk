@@ -145,7 +145,7 @@ PRODUCT_PROPERTY_OVERRIDES := \
 # be reachable from resources or other mechanisms.
 PRODUCT_PROPERTY_OVERRIDES += \
        wifi.interface=wlan0 \
-       ro.vold.switchablepair=/mnt/emmc,/mnt/sdcard
+       ro.vold.switchablepair=/storage/sdcard0,/storage/sdcard1
 
 # enable Google-specific location features,
 # like NetworkLocationProvider and LocationCollector
