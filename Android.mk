@@ -21,11 +21,6 @@ LOCAL_SRC_FILES := keys/s3c-keypad.kcm
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_KEY_CHAR_MAP)
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := keys/cypress-touchkey.kcm
-LOCAL_MODULE_TAGS := optional
-include $(BUILD_KEY_CHAR_MAP)
-
 ifneq ($(TARGET_SIMULATOR),true)
 include $(call all-makefiles-under,$(LOCAL_PATH))
 endif
