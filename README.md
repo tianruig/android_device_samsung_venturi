@@ -25,7 +25,7 @@ Modification and improving the aforementioned source tree is strongly encouraged
 A tip: If you're just making a kernel, you don't have to make an entire .zip file. Instead, type:
 
 ```bash
-. build/envsetup.sh"
+. build/envsetup.sh
 ```
 
 Then, type:
