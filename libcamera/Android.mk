@@ -1,5 +1,3 @@
-ifneq ($(TARGET_PROVIDES_LIBCAMERA),true)
-
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -23,14 +21,5 @@ LOCAL_MODULE := camera.aries
 
 LOCAL_MODULE_TAGS := optional
 
-ifdef BOARD_SECOND_CAMERA_DEVICE
-    LOCAL_CFLAGS += -DFFC_PRESENT
-endif
-
-ifdef BOARD_CAMERA_HAVE_FLASH
-    LOCAL_CFLAGS += -DHAVE_FLASH
-endif
-
 include $(BUILD_SHARED_LIBRARY)
 
-endif
