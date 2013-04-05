@@ -31,6 +31,7 @@ on boot
 
 # phone
     setprop ro.telephony.call_ring.multiple 0
+    setprop ro.radio.noril yes
 
 on fs
     mount_all fstab.venturi
@@ -88,13 +89,6 @@ on post-fs-data
     chmod 0775 /data/log
 
     setprop vold.post_fs_data_done 1
-
-#service aries-ril-daemon /system/bin/rild
-#    class core
-#    socket rild stream 660 root radio
-#    socket rild-debug stream 660 radio system
-#    user root
-#    group radio cache inet misc audio log
 
 # 3D init
 service pvrsrvinit /system/vendor/bin/pvrsrvinit
@@ -160,3 +154,4 @@ service geomagneticd /system/vendor/bin/geomagneticd
     class late_start
     user compass
     group system input
+    disabled
