@@ -18,7 +18,16 @@ In order to build CM-10.1 for this device, sync the entire CyanogenMod repo (ins
 
 Then, run "repo sync" one more time. After it gets the device, vendor, kernel, and Samsung hardware files you will be able to build.
 
-The after syncing the entire CyanogenMod source tree and the Venturi files, type ". build/envsetup.sh" and then the build command is "brunch venturi_usa"
+The after syncing the entire CyanogenMod source tree and the Venturi files, type:
+
+```bash
+. build/envsetup.sh
+```
+
+and then the build command is:
+```bash
+brunch venturi_usa
+```
 
 Modification and improving the aforementioned source tree is strongly encouraged! Happy building!
 
