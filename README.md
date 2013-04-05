@@ -12,7 +12,7 @@ In order to build CM-10.1 for this device, one must clone:
 
 3. the vendor folder source from https://github.com/JackpotClavin/android_vendor_samsung_venturi_usa and place it under (sourceroot)/vendor/samsung/venturi_usa
 
-4. and lastly, the kernel source tree https://github.com/JackpotClavin/android_kernel_samsung_venturi and place it under (sourceroot)/kernel/samsung/kernel/venturi
+4. and lastly, the kernel source tree https://github.com/JackpotClavin/android_kernel_samsung_venturi and place it under (sourceroot)/kernel/samsung/venturi
 
 The after syncing the entire CyanogenMod source tree, type ". build/envsetup.sh" and then the build command is "brunch venturi_usa"
 
