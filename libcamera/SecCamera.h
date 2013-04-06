@@ -35,7 +35,7 @@
 
 #include <utils/RefBase.h>
 #include <linux/videodev2.h>
-#include "videodev2_samsung2.h"
+#include <videodev2_samsung.h>
 
 #include <utils/String8.h>
 
@@ -45,57 +45,57 @@ namespace android {
 
 #define ENABLE_ESD_PREVIEW_CHECK
 
-#if defined(ALOG_NDEBUG) && LOG_NDEBUG == 0
-#define ALOG_CAMERA LOGD
-#define ALOG_CAMERA_PREVIEW LOGD
+#if defined(LOG_NDEBUG) && LOG_NDEBUG == 0
+#define LOG_CAMERA ALOGD
+#define LOG_CAMERA_PREVIEW ALOGD
 
-#define ALOG_TIME_DEFINE(n) \
+#define LOG_TIME_DEFINE(n) \
     struct timeval time_start_##n, time_stop_##n; unsigned long log_time_##n = 0;
 
-#define ALOG_TIME_START(n) \
+#define LOG_TIME_START(n) \
     gettimeofday(&time_start_##n, NULL);
 
-#define ALOG_TIME_END(n) \
+#define LOG_TIME_END(n) \
     gettimeofday(&time_stop_##n, NULL); log_time_##n = measure_time(&time_start_##n, &time_stop_##n);
 
-#define ALOG_TIME(n) \
+#define LOG_TIME(n) \
     log_time_##n
 
 #else
-#define ALOG_CAMERA(...)
-#define ALOG_CAMERA_PREVIEW(...)
-#define ALOG_TIME_DEFINE(n)
-#define ALOG_TIME_START(n)
-#define ALOG_TIME_END(n)
-#define ALOG_TIME(n)
+#define LOG_CAMERA(...)
+#define LOG_CAMERA_PREVIEW(...)
+#define LOG_TIME_DEFINE(n)
+#define LOG_TIME_START(n)
+#define LOG_TIME_END(n)
+#define LOG_TIME(n)
 #endif
 
 #define JOIN(x, y) JOIN_AGAIN(x, y)
 #define JOIN_AGAIN(x, y) x ## y
 
 #define FRONT_CAM VGA
-#define BACK_CAM S5K5CCGX
+#define BACK_CAM S5K4ECGX
 
 #if !defined (FRONT_CAM) || !defined(BACK_CAM)
 #error "Please define the Camera module"
 #endif
 
-#define S5K5CCGX_PREVIEW_WIDTH            720
-#define S5K5CCGX_PREVIEW_HEIGHT           480
-#define S5K5CCGX_SNAPSHOT_WIDTH           2048
-#define S5K5CCGX_SNAPSHOT_HEIGHT          1536
+#define S5K4ECGX_PREVIEW_WIDTH            720
+#define S5K4ECGX_PREVIEW_HEIGHT           480
+#define S5K4ECGX_SNAPSHOT_WIDTH           2560
+#define S5K4ECGX_SNAPSHOT_HEIGHT          1920
 
-#define S5K5CCGX_POSTVIEW_WIDTH           320
-#define S5K5CCGX_POSTVIEW_WIDE_WIDTH      400
-#define S5K5CCGX_POSTVIEW_HEIGHT          240
-#define S5K5CCGX_POSTVIEW_BPP             16
+#define S5K4ECGX_POSTVIEW_WIDTH           640
+#define S5K4ECGX_POSTVIEW_WIDE_WIDTH      800
+#define S5K4ECGX_POSTVIEW_HEIGHT          480
+#define S5K4ECGX_POSTVIEW_BPP             16
 
-#define S5K5CCGX_THUMBNAIL_WIDTH          320
-#define S5K5CCGX_THUMBNAIL_HEIGHT         240
-#define S5K5CCGX_THUMBNAIL_BPP            16
+#define S5K4ECGX_THUMBNAIL_WIDTH          320
+#define S5K4ECGX_THUMBNAIL_HEIGHT         240
+#define S5K4ECGX_THUMBNAIL_BPP            16
 
-/* focal length of 2.78mm */
-#define S5K5CCGX_FOCAL_LENGTH             278
+/* focal length of 3.43mm */
+#define S5K4ECGX_FOCAL_LENGTH             343
 
 #define VGA_PREVIEW_WIDTH               640
 #define VGA_PREVIEW_HEIGHT              480
@@ -146,6 +146,13 @@ namespace android {
 #define BPP             2
 #define MIN(x, y)       (((x) < (y)) ? (x) : (y))
 #define MAX_BUFFERS     9 // 11
+
+#define FIRST_AF_SEARCH_COUNT 80
+#define SECOND_AF_SEARCH_COUNT 80
+#define AF_PROGRESS 0x01
+#define AF_SUCCESS 0x02
+#define AF_DELAY 50000
+
 /*
  * V 4 L 2   F I M C   E X T E N S I O N S
  *
@@ -317,6 +324,9 @@ public:
     int             zoomIn(void);
     int             zoomOut(void);
 
+    int             SetRotate(int angle);
+    int             getRotate(void);
+
     int             setVerticalMirror(void);
     int             setHorizontalMirror(void);
 
@@ -350,6 +360,12 @@ public:
     int             setSharpness(int sharpness_value);
     int             getSharpness(void);
 
+    int             setWDR(int wdr_value);
+    int             getWDR(void);
+
+    int             setAntiShake(int anti_shake);
+    int             getAntiShake(void);
+
     int             setJpegQuality(int jpeg_qality);
     int             getJpegQuality(void);
 
@@ -360,10 +376,21 @@ public:
     int             getObjectTracking(void);
     int             getObjectTrackingStatus(void);
 
+    int             setSmartAuto(int smart_auto);
+    int             getSmartAuto(void);
     int             getAutosceneStatus(void);
+
+    int             setBeautyShot(int beauty_shot);
+    int             getBeautyShot(void);
+
+    int             setVintageMode(int vintage_mode);
+    int             getVintageMode(void);
 
     int             setFocusMode(int focus_mode);
     int             getFocusMode(void);
+
+    int             setFaceDetect(int face_detect);
+    int             getFaceDetect(void);
 
     int             setGPSLatitude(const char *gps_latitude);
     int             setGPSLongitude(const char *gps_longitude);
@@ -371,13 +398,19 @@ public:
     int             setGPSTimeStamp(const char *gps_timestamp);
     int             setGPSProcessingMethod(const char *gps_timestamp);
     int             cancelAutofocus(void);
+    int             setFaceDetectLockUnlock(int facedetect_lockunlock);
     int             setObjectPosition(int x, int y);
     int             setObjectTrackingStartStop(int start_stop);
     int             setTouchAFStartStop(int start_stop);
+    int             setCAFStatus(int on_off);
     int             getAutoFocusResult(void);
+    int             setAntiBanding(int anti_banding);
     int             getPostview(void);
     int             setRecordingSize(int width, int height);
+    int             setGamma(int gamma);
+    int             setSlowAE(int slow_ae);
     int             setExifOrientationInfo(int orientationInfo);
+    int             setBatchReflection(void);
     int             setSnapshotCmd(void);
     int             endSnapshot(void);
     int             setCameraSensorReset(void);
@@ -477,8 +510,15 @@ private:
     int             m_snapshot_max_height;
 
     int             m_angle;
+    int             m_anti_banding;
+    int             m_wdr;
+    int             m_anti_shake;
     int             m_zoom_level;
     int             m_object_tracking;
+    int             m_smart_auto;
+    int             m_beauty_shot;
+    int             m_vintage_mode;
+    int             m_face_detect;
     int             m_object_tracking_start_stop;
     int             m_recording_width;
     int             m_recording_height;
@@ -493,6 +533,9 @@ private:
     int             m_exif_orientation;
     int             m_blur_level;
     int             m_chk_dataline;
+    int             m_video_gamma;
+    int             m_slow_ae;
+    int             m_caf_on_off;
     int             m_default_imei;
     int             m_camera_af_flag;
 
