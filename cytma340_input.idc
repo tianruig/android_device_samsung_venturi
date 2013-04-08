@@ -23,8 +23,8 @@ touch.orientationAware = 1
 # Size
 # Based on empirical measurements, we estimate the size of the contact
 # using size = sqrt(area) * 28 + 0.
-touch.size.calibration = area
-touch.size.scale = 28
+touch.size.calibration = none
+touch.size.scale = 1
 touch.size.bias = 0
 touch.size.isSummed = 0
 
@@ -33,8 +33,8 @@ touch.size.isSummed = 0
 #
 # A normal index finger touch typically registers about 80 signal strength
 # units although we don't expect these values to be accurate.
-touch.pressure.calibration = amplitude
-touch.pressure.scale = 0.0125
+touch.pressure.calibration = none
+touch.pressure.scale = 0.01
 
 # Orientation
 touch.orientation.calibration = vector
