@@ -28,7 +28,7 @@ BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/venturi_usa/recovery/re
 #BOARD_USES_FROYO_RILCLIENT := true
 
 # Bluetooth
-#BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/venturi_usa/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/venturi_usa/bluetooth
 
 TARGET_OTA_ASSERT_DEVICE := YP-G70,venturi_usa,venturi
 
