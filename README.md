@@ -1,5 +1,7 @@
 Device files for the Samsung Galaxy Player 5.0 USA
 
+## Building ROMs
+
 The files in this folder are the product of the aries-common folder from https://github.com/CyanogenMod/android_device_samsung_aries-common
 and the vibrantmtd folder from https://github.com/CyanogenMod/android_device_samsung_vibrantmtd merged into one, and modified to run on the
 US Samsung Galaxy Player 5.0 aka venturi_usa.
@@ -18,9 +20,20 @@ In order to build CM-10.1 for this device, sync the entire CyanogenMod repo (ins
 
 Then, run "repo sync" one more time. After it gets the device, vendor, kernel, and Samsung hardware files you will be able to build.
 
-The after syncing the entire CyanogenMod source tree and the Venturi files, type ". build/envsetup.sh" and then the build command is "brunch venturi_usa"
+The after syncing the entire CyanogenMod source tree and the Venturi files, type:
+
+```bash
+. build/envsetup.sh
+```
+
+and then the build command is:
+```bash
+brunch venturi_usa
+```
 
 Modification and improving the aforementioned source tree is strongly encouraged! Happy building!
+
+## Building just the kernel and boot.img
 
 A tip: If you're just making a kernel, you don't have to make an entire .zip file. Instead, type:
 
