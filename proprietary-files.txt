@@ -33,10 +33,3 @@ vendor/lib/libPVRScopeServices.so
 vendor/lib/libsrv_init.so
 vendor/lib/libsrv_um.so
 vendor/lib/libusc.so
-lib/libtvout.so
-lib/libtvout_jni.so
-lib/lib_tvoutengine.so
-lib/libtvoutfimc.so
-lib/libtvouthdmi.so
-lib/libtvoutservice.so
-bin/tvoutserver
