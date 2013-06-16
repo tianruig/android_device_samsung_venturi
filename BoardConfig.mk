@@ -18,18 +18,10 @@
 #
 
 # Kernel Config
-#TARGET_KERNEL_CONFIG := cyanogenmod_venturi_defconfig
-#TARGET_PREBUILT_KERNEL := device/samsung/venturi/kernel
+TARGET_KERNEL_CONFIG := cyanogenmod_venturi_defconfig
 
 # Recovery
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/venturi/recovery/recovery_keys.c
-
-# Telephony
-#BOARD_USES_FROYO_RILCLIENT := true
-
-# Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/venturi/bluetooth
-
 TARGET_OTA_ASSERT_DEVICE := YP-G70,venturi,venturi_usa
 
 # Import the BoardConfigCommon.mk

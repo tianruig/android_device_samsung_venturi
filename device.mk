@@ -12,12 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DEVICE_PACKAGE_OVERLAYS := device/samsung/venturi/overlay
-
-# These are the hardware-specific configuration files
-PRODUCT_COPY_FILES := \
-	device/samsung/venturi/etc/asound.conf:system/etc/asound.conf
-
 # Inherit common configuration
 $(call inherit-product, device/samsung/venturi/device_base.mk)
 

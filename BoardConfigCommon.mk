@@ -34,13 +34,12 @@ TARGET_NO_RADIOIMAGE := true
 
 TARGET_PROVIDES_INIT := true
 TARGET_BOARD_PLATFORM := s5pc110
-TARGET_BOOTLOADER_BOARD_NAME := aries
+TARGET_BOOTLOADER_BOARD_NAME := s5pc110
 
 #BOARD_MOBILEDATA_INTERFACE_NAME = "pdp0"
 
 # Kernel Source
 TARGET_KERNEL_SOURCE := kernel/samsung/venturi
-TARGET_KERNEL_CONFIG := galaxyplayer5_defconfig
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/samsung/venturi
@@ -57,6 +56,8 @@ BOARD_CAMERA_HAVE_ISO := true
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/venturi/bluetooth
+BOARD_BLUEDROID_VENDOR_CONF := device/samsung/venturi/libbt_vndcfg.txt
 
 # Video Devices
 BOARD_V4L2_DEVICE := /dev/video1
@@ -87,9 +88,6 @@ WIFI_DRIVER_MODULE_NAME     := "bcmdhd"
 WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
 WIFI_DRIVER_FW_PATH_STA     := "/vendor/firmware/fw_bcmdhd.bin"
 WIFI_DRIVER_FW_PATH_AP      := "/vendor/firmware/fw_bcmdhd_apsta.bin"
-
-# Bluetooth
-BOARD_BLUEDROID_VENDOR_CONF := device/samsung/venturi/libbt_vndcfg.txt
 
 # Vold
 BOARD_VOLD_MAX_PARTITIONS    := 17
@@ -128,5 +126,5 @@ BOARD_CUSTOM_VSYNC_IOCTL := true
 # Suspend in charger to disable capacitive keys
 BOARD_CHARGER_ENABLE_SUSPEND := true
 
-# Include aries specific stuff
+# Include venturi specific stuff
 -include device/samsung/venturi/Android.mk

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Custom OTA commands for aries"""
+"""Custom OTA commands for venturi"""
 
 import common
 import os

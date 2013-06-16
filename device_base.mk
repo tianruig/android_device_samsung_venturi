@@ -94,14 +94,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	power.s5pc110 \
 	hwcomposer.s5pc110 \
-	camera.aries \
-	audio.primary.aries \
+	camera.s5pc110 \
+	audio.primary.s5pc110 \
 	audio.a2dp.default \
 	audio.usb.default \
 	libs3cjpeg
 
 PRODUCT_COPY_FILES += \
-	device/samsung/venturi/libaudio/audio_policy.conf:system/etc/audio_policy.conf
+	device/samsung/venturi/libaudio/audio_policy.conf:system/etc/audio_policy.conf \
+	device/samsung/venturi/etc/asound.conf:system/etc/asound.conf
 
 # Libs
 PRODUCT_PACKAGES += \
