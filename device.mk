@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DEVICE_PACKAGE_OVERLAYS := device/samsung/venturi_usa/overlay
+DEVICE_PACKAGE_OVERLAYS := device/samsung/venturi/overlay
 
 # These are the hardware-specific configuration files
 PRODUCT_COPY_FILES := \
-	device/samsung/venturi_usa/etc/asound.conf:system/etc/asound.conf
+	device/samsung/venturi/etc/asound.conf:system/etc/asound.conf
 
 # Inherit common configuration
-$(call inherit-product, device/samsung/venturi_usa/device_base.mk)
+$(call inherit-product, device/samsung/venturi/device_base.mk)
 
 # Proprietary
-$(call inherit-product-if-exists, vendor/samsung/venturi_usa/venturi_usa-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung/venturi/venturi-vendor.mk)

@@ -38,29 +38,29 @@
 # These is the hardware-specific overlay, which points to the location
 # of hardware-specific resource overrides, typically the frameworks and
 # application settings that are stored in resourced.
-DEVICE_PACKAGE_OVERLAYS := device/samsung/venturi_usa/overlay
+DEVICE_PACKAGE_OVERLAYS := device/samsung/venturi/overlay
 
 # These are the hardware-specific configuration files
 PRODUCT_COPY_FILES := \
-	device/samsung/venturi_usa/vold.fstab:system/etc/vold.fstab \
-	device/samsung/venturi_usa/egl.cfg:system/lib/egl/egl.cfg \
-	device/samsung/venturi_usa/cytma340_input.idc:system/usr/idc/cytma340_input.idc
+	device/samsung/venturi/vold.fstab:system/etc/vold.fstab \
+	device/samsung/venturi/egl.cfg:system/lib/egl/egl.cfg \
+	device/samsung/venturi/cytma340_input.idc:system/usr/idc/cytma340_input.idc
 
 # Init files
 PRODUCT_COPY_FILES += \
-	device/samsung/venturi_usa/init.venturi.rc:root/init.venturi.rc \
-	device/samsung/venturi_usa/init.venturi.gps.rc:root/init.venturi.gps.rc \
-	device/samsung/venturi_usa/init.venturi.usb.rc:root/init.venturi.usb.rc \
-	device/samsung/venturi_usa/init.recovery.venturi.rc:root/init.recovery.venturi.rc \
-	device/samsung/venturi_usa/init.venturi.usb.rc:recovery/root/usb.rc \
-	device/samsung/venturi_usa/fstab.venturi:root/fstab.venturi \
-	device/samsung/venturi_usa/ueventd.venturi.rc:root/ueventd.venturi.rc
+	device/samsung/venturi/init.venturi.rc:root/init.venturi.rc \
+	device/samsung/venturi/init.venturi.gps.rc:root/init.venturi.gps.rc \
+	device/samsung/venturi/init.venturi.usb.rc:root/init.venturi.usb.rc \
+	device/samsung/venturi/init.recovery.venturi.rc:root/init.recovery.venturi.rc \
+	device/samsung/venturi/init.venturi.usb.rc:recovery/root/usb.rc \
+	device/samsung/venturi/fstab.venturi:root/fstab.venturi \
+	device/samsung/venturi/ueventd.venturi.rc:root/ueventd.venturi.rc
 
 # Prebuilt kl keymaps
 PRODUCT_COPY_FILES += \
-	device/samsung/venturi_usa/cytma340_input.kl:system/usr/keylayout/cytma340_input.kl \
-	device/samsung/venturi_usa/sec_jack.kl:system/usr/keylayout/sec_jack.kl \
-	device/samsung/venturi_usa/s3c-keypad.kl:system/usr/keylayout/s3c-keypad.kl
+	device/samsung/venturi/cytma340_input.kl:system/usr/keylayout/cytma340_input.kl \
+	device/samsung/venturi/sec_jack.kl:system/usr/keylayout/sec_jack.kl \
+	device/samsung/venturi/s3c-keypad.kl:system/usr/keylayout/s3c-keypad.kl
 
 # Generated kcm keymaps
 PRODUCT_PACKAGES := \
@@ -79,8 +79,8 @@ PRODUCT_PACKAGES += \
 # These are the OpenMAX IL configuration files
 PRODUCT_COPY_FILES += \
 	hardware/samsung/exynos3/s5pc110/sec_mm/sec_omx/sec_omx_core/secomxregistry:system/etc/secomxregistry \
-	device/samsung/venturi_usa/media_profiles.xml:system/etc/media_profiles.xml \
-	device/samsung/venturi_usa/media_codecs.xml:system/etc/media_codecs.xml
+	device/samsung/venturi/media_profiles.xml:system/etc/media_profiles.xml \
+	device/samsung/venturi/media_codecs.xml:system/etc/media_codecs.xml
 
 # These are the OpenMAX IL modules
 PRODUCT_PACKAGES += \
@@ -101,7 +101,7 @@ PRODUCT_PACKAGES += \
 	libs3cjpeg
 
 PRODUCT_COPY_FILES += \
-	device/samsung/venturi_usa/libaudio/audio_policy.conf:system/etc/audio_policy.conf
+	device/samsung/venturi/libaudio/audio_policy.conf:system/etc/audio_policy.conf
 
 # Libs
 PRODUCT_PACKAGES += \
@@ -185,7 +185,7 @@ include frameworks/native/build/phone-hdpi-512-dalvik-heap.mk
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 PRODUCT_COPY_FILES += \
-	device/samsung/venturi_usa/updater.sh:updater.sh \
-	device/samsung/venturi_usa/movefiles.sh:movefiles.sh
+	device/samsung/venturi/updater.sh:updater.sh \
+	device/samsung/venturi/movefiles.sh:movefiles.sh
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)

@@ -15,4 +15,4 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/full_venturi_usa.mk
+    $(LOCAL_DIR)/full_venturi.mk

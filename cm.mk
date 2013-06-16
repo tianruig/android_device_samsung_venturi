@@ -9,11 +9,11 @@ PRODUCT_RELEASE_NAME := GalaxyPlayer5
 $(call inherit-product, vendor/cm/config/common_full_tablet_wifionly.mk)
 
 # Inherit device configuration
-$(call inherit-product, device/samsung/venturi_usa/full_venturi_usa.mk)
+$(call inherit-product, device/samsung/venturi/full_venturi.mk)
 
 ## Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := venturi_usa
-PRODUCT_NAME := cm_venturi_usa
+PRODUCT_DEVICE := venturi
+PRODUCT_NAME := cm_venturi
 PRODUCT_BRAND := Samsung
 PRODUCT_MODEL := YP-G70
 

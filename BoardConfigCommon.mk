@@ -43,9 +43,9 @@ TARGET_KERNEL_SOURCE := kernel/samsung/venturi
 TARGET_KERNEL_CONFIG := galaxyplayer5_defconfig
 
 # Releasetools
-TARGET_RELEASETOOLS_EXTENSIONS := device/samsung/venturi_usa
+TARGET_RELEASETOOLS_EXTENSIONS := device/samsung/venturi
 # Releasetools
-TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/samsung/venturi_usa/releasetools/ota_from_target_files
+TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/samsung/venturi/releasetools/ota_from_target_files
 
 # Camera
 USE_CAMERA_STUB := false
@@ -89,7 +89,7 @@ WIFI_DRIVER_FW_PATH_STA     := "/vendor/firmware/fw_bcmdhd.bin"
 WIFI_DRIVER_FW_PATH_AP      := "/vendor/firmware/fw_bcmdhd_apsta.bin"
 
 # Bluetooth
-BOARD_BLUEDROID_VENDOR_CONF := device/samsung/venturi_usa/libbt_vndcfg.txt
+BOARD_BLUEDROID_VENDOR_CONF := device/samsung/venturi/libbt_vndcfg.txt
 
 # Vold
 BOARD_VOLD_MAX_PARTITIONS    := 17
@@ -99,9 +99,9 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/s3c-usbgadget/gadget/l
 # Recovery
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_HAS_NO_SELECT_BUTTON := true
-BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/venturi_usa/recovery/graphics.c
+BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/venturi/recovery/graphics.c
 #BOARD_USES_BML_OVER_MTD := true
-BOARD_CUSTOM_BOOTIMG_MK := device/samsung/venturi_usa/shbootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := device/samsung/venturi/shbootimg.mk
 TARGET_RECOVERY_PRE_COMMAND := "echo 1 > /cache/.startrecovery; sync;"
 
 # Boot Animation
@@ -132,4 +132,4 @@ BOARD_CUSTOM_VSYNC_IOCTL := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
 
 # Include aries specific stuff
--include device/samsung/venturi_usa/Android.mk
+-include device/samsung/venturi/Android.mk

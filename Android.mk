@@ -14,7 +14,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),venturi_usa)
+ifeq ($(TARGET_DEVICE),venturi)
 
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := keys/s3c-keypad.kcm
