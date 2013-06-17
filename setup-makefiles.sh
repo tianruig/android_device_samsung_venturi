@@ -28,7 +28,6 @@ LINEEND=" \\"
 for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$`; do
     echo "    $OUTDIR/proprietary/$FILE:system/$FILE$LINEEND" >> ../../../$OUTDIR/$DEVICE-vendor-blobs.mk
 done
-echo "    $OUTDIR/proprietary/modem.bin:modem.bin" >> ../../../$OUTDIR/$DEVICE-vendor-blobs.mk
 
 (cat << EOF) > ../../../$OUTDIR/$DEVICE-vendor.mk
 # Copyright (C) 2010 The Android Open Source Project
@@ -79,15 +78,11 @@ EOF
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#BOARD_GPS_LIBRARIES := libgps
-
-USE_CAMERA_STUB := false
-
-BOARD_USES_GENERIC_AUDIO := false
-
+# Use proprietary RIL blob
 BOARD_USES_LIBSECRIL_STUB := false
 
+# Enable hardware acceleration
+USE_OPENGL_RENDERER := true
 BOARD_NO_PAGE_FLIPPING := false
 BOARD_NO_32BPP := false
 EOF
-

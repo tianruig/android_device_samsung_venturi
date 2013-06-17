@@ -43,6 +43,7 @@ DEVICE_PACKAGE_OVERLAYS := device/samsung/venturi/overlay
 # These are the hardware-specific configuration files
 PRODUCT_COPY_FILES := \
 	device/samsung/venturi/vold.fstab:system/etc/vold.fstab \
+	device/samsung/venturi/gps.conf:system/etc/gps.conf \
 	device/samsung/venturi/egl.cfg:system/lib/egl/egl.cfg \
 	device/samsung/venturi/cytma340_input.idc:system/usr/idc/cytma340_input.idc
 
