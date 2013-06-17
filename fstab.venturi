@@ -4,5 +4,5 @@
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 /dev/block/mmcblk0p13      /system             ext4      ro						       wait
 /dev/block/mmcblk0p15      /cache              ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait
-/dev/block/mmcblk0p14      /system/vendor/app  ext4      ro						       wait
+/dev/block/mmcblk0p14      /system/vendor      ext4      ro						       wait
 /dev/block/mmcblk0p16      /data               ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait

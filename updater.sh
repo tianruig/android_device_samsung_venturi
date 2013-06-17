@@ -1,7 +1,7 @@
 #!/tmp/busybox sh
 #
 # Filsystem Conversion Script for Samsung Galaxy Player 5.0 USA
-# 
+#
 # (c) 2011 by Teamhacksung
 #
 
@@ -12,14 +12,14 @@ export PATH=/:/sbin:/system/xbin:/system/bin:/tmp:$PATH
 /tmp/busybox umount -l /system
 /tmp/busybox umount -l /cache
 /tmp/busybox umount -l /data
-/tmp/busybox umount -l /system_app
+/tmp/busybox umount -l /vendor
 
 # create directories
 /tmp/busybox mount -o remount,rw /
 /tmp/busybox mkdir -p /system
 /tmp/busybox mkdir -p /cache
 /tmp/busybox mkdir -p /data
-/tmp/busybox mkdir -p /system_app
+/tmp/busybox mkdir -p /vendor
 
 # make sure internal sdcard is mounted
 if ! /tmp/busybox grep -q /emmc /proc/mounts ; then
@@ -47,6 +47,12 @@ if ! /tmp/busybox mount -t ext4 /dev/block/mmcblk0p13 /system ; then
     /tmp/make_ext4fs -b 4096 -g 32768 -i 8192 -I 256 -a /system /dev/block/mmcblk0p13
 fi
 
+# we always need to format vendor.
+# if ! /tmp/busybox mount -t ext4 /dev/block/mmcblk0p14 /vendor ; then
+    /tmp/busybox umount /vendor
+    /tmp/make_ext4fs -b 4096 -g 32768 -i 8192 -I 256 -a /vendor /dev/block/mmcblk0p14
+# fi
+
 # format cache if not ext4
 if ! /tmp/busybox mount -t ext4 /dev/block/mmcblk0p15 /cache ; then
     /tmp/busybox umount /cache
@@ -59,16 +65,10 @@ if ! /tmp/busybox mount -t ext4 /dev/block/mmcblk0p16 /data ; then
     /tmp/make_ext4fs -b 4096 -g 32768 -i 8192 -I 256 -a /data /dev/block/mmcblk0p16
 fi
 
-# format system_app if not ext4
-if ! /tmp/busybox mount -t ext4 /dev/block/mmcblk0p14 /system_app ; then
-    /tmp/busybox umount /system_app
-    /tmp/make_ext4fs -b 4096 -g 32768 -i 8192 -I 256 -a /system_app /dev/block/mmcblk0p14
-fi
-
 # unmount everything
 /tmp/busybox umount -l /system
 /tmp/busybox umount -l /cache
 /tmp/busybox umount -l /data
-/tmp/busybox umount -l /system_app
+/tmp/busybox umount -l /vendor
 
 exit 0

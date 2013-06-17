@@ -45,21 +45,15 @@ def FullOTA_Assertions(info):
   info.script.AppendExtra('package_extract_file("boot.img", "/tmp/boot.img");')
   info.script.AppendExtra('assert(run_program("/tmp/updater.sh") == 0);')
 
-  info.script.AppendExtra('format("ext4", "EMMC", "/dev/block/mmcblk0p13", "0", "/system");')
-
   # Make common releasetools copy boot.img verbatim
-  # kernel_path = os.path.join(info.input_tmp, "BOOT", "kernel")
-  # prebuilt_dir = os.path.join(info.input_tmp, "BOOTABLE_IMAGES")
-  # prebuilt_path = os.path.join(prebuilt_dir, "boot.img")
-  # os.mkdir(prebuilt_dir)
-  # shutil.copyfile(kernel_path, prebuilt_path)
-
+  kernel_path = os.path.join(info.input_tmp, "BOOT", "kernel")
+  prebuilt_dir = os.path.join(info.input_tmp, "BOOTABLE_IMAGES")
+  prebuilt_path = os.path.join(prebuilt_dir, "boot.img")
+  os.mkdir(prebuilt_dir)
+  shutil.copyfile(kernel_path, prebuilt_path)
 
 def FullOTA_InstallEnd(info):
-  # Remove writing boot.img from script (we do it in updater.sh)
-  info.script.script = [cmd for cmd in info.script.script if not "write_raw_image" in cmd]
-
-  info.script.AppendExtra('format("ext4", "EMMC", "/dev/block/mmcblk0p14", "0", "/system_app");')
-  info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/mmcblk0p14", "/system_app");')
+  # Move files to /vendor
+  info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/mmcblk0p14", "/vendor");')
   info.script.AppendExtra('run_program("/tmp/movefiles.sh");')
-  info.script.AppendExtra('unmount("/system_app");')
+  info.script.AppendExtra('unmount("/vendor");')
