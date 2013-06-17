@@ -16,10 +16,4 @@ LOCAL_PATH := $(call my-dir)
 
 ifneq ($(filter venturi venturiusa venturikor,$(TARGET_DEVICE)),)
     include $(all-subdir-makefiles)
-
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := keys/s3c-keypad.kcm
-LOCAL_MODULE_TAGS := optional
-include $(BUILD_KEY_CHAR_MAP)
-
 endif
