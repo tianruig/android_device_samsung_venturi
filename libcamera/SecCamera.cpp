@@ -308,7 +308,7 @@ static int fimc_v4l2_enum_fmt(int fp, unsigned int fmt)
             found = 1;
             break;
         }
-ALOGE("pixfmt %d = %s", fmtdesc.index, fmtdesc.description);
+
         fmtdesc.index++;
     }
 
@@ -2840,9 +2840,6 @@ void SecCamera::setExifChangedAttribute()
         iso = ISO_100;
     }
     switch(iso) {
-        case ISO_50:
-            mExifInfo.iso_speed_rating = 50;
-            break;
         case ISO_100:
             mExifInfo.iso_speed_rating = 100;
             break;
@@ -2851,12 +2848,6 @@ void SecCamera::setExifChangedAttribute()
             break;
         case ISO_400:
             mExifInfo.iso_speed_rating = 400;
-            break;
-        case ISO_800:
-            mExifInfo.iso_speed_rating = 800;
-            break;
-        case ISO_1600:
-            mExifInfo.iso_speed_rating = 1600;
             break;
         default:
             mExifInfo.iso_speed_rating = 100;
@@ -3032,7 +3023,7 @@ status_t SecCamera::dump(int fd)
 }
 
 double SecCamera::jpeg_ratio = 0.7;
-int SecCamera::interleaveDataSize = 5242880;
+int SecCamera::interleaveDataSize = 0x33F000;
 int SecCamera::jpegLineLength = 636;
 
 }; // namespace android
