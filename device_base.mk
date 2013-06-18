@@ -42,15 +42,15 @@ DEVICE_PACKAGE_OVERLAYS := device/samsung/venturi/overlay
 
 # These are the hardware-specific configuration files
 PRODUCT_COPY_FILES := \
-	device/samsung/venturi/vold.fstab:system/etc/vold.fstab \
-	device/samsung/venturi/gps.conf:system/etc/gps.conf \
-	device/samsung/venturi/egl.cfg:system/lib/egl/egl.cfg \
-	device/samsung/venturi/cytma340_input.idc:system/usr/idc/cytma340_input.idc
+	device/samsung/venturi/etc/asound.conf:system/etc/asound.conf \
+	device/samsung/venturi/etc/audio_policy.conf:system/etc/audio_policy.conf \
+	device/samsung/venturi/etc/egl.cfg:system/lib/egl/egl.cfg \
+	device/samsung/venturi/etc/gps.conf:system/etc/gps.conf \
+	device/samsung/venturi/etc/vold.fstab:system/etc/vold.fstab
 
 # Init files
 PRODUCT_COPY_FILES += \
 	device/samsung/venturi/init.venturi.rc:root/init.venturi.rc \
-	device/samsung/venturi/init.venturi.gps.rc:root/init.venturi.gps.rc \
 	device/samsung/venturi/init.venturi.usb.rc:root/init.venturi.usb.rc \
 	device/samsung/venturi/init.recovery.venturi.rc:root/init.recovery.venturi.rc \
 	device/samsung/venturi/init.venturi.usb.rc:recovery/root/usb.rc \
@@ -59,9 +59,10 @@ PRODUCT_COPY_FILES += \
 
 # Prebuilt kl keymaps
 PRODUCT_COPY_FILES += \
-	device/samsung/venturi/cytma340_input.kl:system/usr/keylayout/cytma340_input.kl \
-	device/samsung/venturi/sec_jack.kl:system/usr/keylayout/sec_jack.kl \
-	device/samsung/venturi/s3c-keypad.kl:system/usr/keylayout/s3c-keypad.kl
+	device/samsung/venturi/keys/cytma340_input.idc:system/usr/idc/cytma340_input.idc \
+	device/samsung/venturi/keys/cytma340_input.kl:system/usr/keylayout/cytma340_input.kl \
+	device/samsung/venturi/keys/s3c-keypad.kl:system/usr/keylayout/s3c-keypad.kl \
+	device/samsung/venturi/keys/sec_jack.kl:system/usr/keylayout/sec_jack.kl
 
 # Generated kcm keymaps
 PRODUCT_PACKAGES := \
@@ -93,20 +94,13 @@ PRODUCT_PACKAGES += \
 
 # Misc other modules
 PRODUCT_PACKAGES += \
-	power.s5pc110 \
-	hwcomposer.s5pc110 \
-	camera.s5pc110 \
 	audio.primary.s5pc110 \
 	audio.a2dp.default \
 	audio.usb.default \
-	libs3cjpeg
-
-PRODUCT_COPY_FILES += \
-	device/samsung/venturi/libaudio/audio_policy.conf:system/etc/audio_policy.conf \
-	device/samsung/venturi/etc/asound.conf:system/etc/asound.conf
-
-# Libs
-PRODUCT_PACKAGES += \
+	camera.s5pc110 \
+	hwcomposer.s5pc110 \
+	power.s5pc110 \
+	libs3cjpeg \
 	libstagefrighthw
 
 # Bluetooth MAC Address
@@ -115,8 +109,7 @@ PRODUCT_PACKAGES += \
 
 # Device-specific packages
 PRODUCT_PACKAGES += \
-	SamsungServiceMode \
-	com.android.future.usb.accessory
+	SamsungServiceMode
 
 # Charger
 PRODUCT_PACKAGES += \
@@ -142,45 +135,45 @@ PRODUCT_COPY_FILES += \
 # The OpenGL ES API level that is natively supported by this device.
 # This is a 16.16 fixed point number
 PRODUCT_PROPERTY_OVERRIDES := \
-    ro.opengles.version=131072
+	ro.opengles.version=131072
 
 # These are the hardware-specific settings that are stored in system properties.
 # Note that the only such settings should be the ones that are too low-level to
 # be reachable from resources or other mechanisms.
 PRODUCT_PROPERTY_OVERRIDES += \
-       wifi.interface=wlan0 \
-       ro.vold.switchablepair=/storage/sdcard0,/storage/sdcard1 \
-       persist.sys.vold.switchexternal=1
+	wifi.interface=wlan0
 
 # enable Google-specific location features,
 # like NetworkLocationProvider and LocationCollector
 PRODUCT_PROPERTY_OVERRIDES += \
-        ro.com.google.locationfeatures=1 \
-        ro.com.google.networklocation=1
+	ro.com.google.locationfeatures=1 \
+	ro.com.google.networklocation=1
 
 # device is wifi-only.
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.carrier=wifi-only
+	ro.carrier=wifi-only
 
 # Extended JNI checks
 # The extended JNI checks will cause the system to run more slowly, but they can spot a variety of nasty bugs 
 # before they have a chance to cause problems.
 # Default=true for development builds, set by android buildsystem.
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.kernel.android.checkjni=0 \
-    dalvik.vm.checkjni=false
+	ro.kernel.android.checkjni=0 \
+	dalvik.vm.checkjni=false
 
 # Override /proc/sys/vm/dirty_ratio on UMS
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vold.umsdirtyratio=20
+	ro.vold.umsdirtyratio=20
 
 # We have sacrificed /cache for a larger /system, so it's not large enough for dalvik cache
 PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.dexopt-data-only=1
+	dalvik.vm.dexopt-data-only=1
 
 # Set default USB interface and default to internal SD as /sdcard
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mass_storage
+	persist.sys.usb.config=mass_storage \
+	ro.vold.switchablepair=/storage/sdcard0,/storage/sdcard1 \
+	persist.sys.vold.switchexternal=0
 
 include frameworks/native/build/phone-hdpi-512-dalvik-heap.mk
 
@@ -192,3 +185,5 @@ PRODUCT_COPY_FILES += \
 	device/samsung/venturi/movefiles.sh:movefiles.sh
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)
+
+PRODUCT_CHARACTERISTICS := tablet

@@ -17,12 +17,12 @@
 # Product-specific compile-time definitions.
 #
 
+# Import the BoardConfigCommon.mk
+include device/samsung/venturi/BoardConfigCommon.mk
+
 # Kernel Config
 TARGET_KERNEL_CONFIG := cyanogenmod_venturi_defconfig
 
 # Recovery
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/venturi/recovery/recovery_keys.c
 TARGET_OTA_ASSERT_DEVICE := YP-G70,venturi,venturi_usa
-
-# Import the BoardConfigCommon.mk
-include device/samsung/venturi/BoardConfigCommon.mk
