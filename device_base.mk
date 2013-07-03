@@ -50,6 +50,7 @@ PRODUCT_COPY_FILES := \
 # Init files
 PRODUCT_COPY_FILES += \
 	device/samsung/venturi/init.venturi.rc:root/init.venturi.rc \
+	device/samsung/venturi/lpm.rc:root/lpm.rc \
 	device/samsung/venturi/init.venturi.usb.rc:root/init.venturi.usb.rc \
 	device/samsung/venturi/init.recovery.venturi.rc:root/init.recovery.venturi.rc \
 	device/samsung/venturi/init.venturi.usb.rc:recovery/root/usb.rc \
