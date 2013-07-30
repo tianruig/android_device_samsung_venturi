@@ -46,7 +46,6 @@ PRODUCT_COPY_FILES := \
 	device/samsung/venturi/etc/audio_policy.conf:system/etc/audio_policy.conf \
 	device/samsung/venturi/etc/egl.cfg:system/lib/egl/egl.cfg \
 	device/samsung/venturi/etc/gps.conf:system/etc/gps.conf \
-	device/samsung/venturi/etc/vold.fstab:system/etc/vold.fstab
 
 # Init files
 PRODUCT_COPY_FILES += \
@@ -55,7 +54,8 @@ PRODUCT_COPY_FILES += \
 	device/samsung/venturi/init.recovery.venturi.rc:root/init.recovery.venturi.rc \
 	device/samsung/venturi/init.venturi.usb.rc:recovery/root/usb.rc \
 	device/samsung/venturi/fstab.venturi:root/fstab.venturi \
-	device/samsung/venturi/ueventd.venturi.rc:root/ueventd.venturi.rc
+	device/samsung/venturi/ueventd.venturi.rc:root/ueventd.venturi.rc\
+	device/samsung/venturi/fstab.venturi:root/fstab.venturi
 
 # Prebuilt kl keymaps
 PRODUCT_COPY_FILES += \

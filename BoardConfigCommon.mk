@@ -124,3 +124,17 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 
 # Include venturi specific stuff
 -include device/samsung/venturi/Android.mk
+
+# SELinux
+BOARD_SEPOLICY_DIRS += \
+    device/samsung/venturi/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+        device.te \
+	domain.te \
+	file_contexts \
+	file.te \
+	init.te \
+	pvrsrvinit.te \
+	system.te \
+	wpa_supplicant.te
