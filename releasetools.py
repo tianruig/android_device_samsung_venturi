@@ -24,6 +24,7 @@ UTILITIES_DIR = os.path.join(TARGET_DIR, 'utilities')
 
 def FullOTA_Assertions(info):
   info.output_zip.write(os.path.join(TARGET_DIR, "updater.sh"), "updater.sh")
+  info.output_zip.write(os.path.join(TARGET_DIR, "restorecon.sh"), "restorecon.sh")
   info.output_zip.write(os.path.join(TARGET_DIR, "movefiles.sh"), "movefiles.sh")
   info.output_zip.write(os.path.join(UTILITIES_DIR, "make_ext4fs"), "make_ext4fs")
   info.output_zip.write(os.path.join(UTILITIES_DIR, "busybox"), "busybox")
@@ -32,6 +33,9 @@ def FullOTA_Assertions(info):
         ('package_extract_file("updater.sh", "/tmp/updater.sh");\n'
          'set_perm(0, 0, 0777, "/tmp/updater.sh");'))
   info.script.AppendExtra(
+        ('package_extract_file("restorecon.sh", "/tmp/restorecon.sh");\n'
+         'set_perm(0, 0, 0777, "/tmp/restorecon.sh");'))
+  info.script.appendExtra(
        ('package_extract_file("make_ext4fs", "/tmp/make_ext4fs");\n'
         'set_perm(0, 0, 0777, "/tmp/make_ext4fs");'))
   info.script.AppendExtra(
@@ -43,6 +47,7 @@ def FullOTA_Assertions(info):
 
   info.script.AppendExtra('package_extract_file("boot.img", "/tmp/boot.img");')
   info.script.AppendExtra('assert(run_program("/tmp/updater.sh") == 0);')
+  info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
 
 def FullOTA_InstallEnd(info):
   # Move files to /vendor

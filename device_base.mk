@@ -181,9 +181,11 @@ include frameworks/native/build/phone-hdpi-512-dalvik-heap.mk
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
+# Conversion files
 PRODUCT_COPY_FILES += \
 	device/samsung/venturi/updater.sh:updater.sh \
-	device/samsung/venturi/movefiles.sh:movefiles.sh
+	device/samsung/venturi/movefiles.sh:movefiles.sh \
+	device/samsung/venturi/restorecon.sh:restorecon.sh
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)
 
