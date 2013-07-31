@@ -1,0 +1,2 @@
+type powervr_device, dev_type, mlstrustedobject;
+type bluetooth_device, dev_type;
