@@ -8,6 +8,7 @@
 set -x
 export PATH=/:/sbin:/system/xbin:/system/bin:/tmp:$PATH
 
+/tmp/busybox rm -rf /vendor
 /tmp/busybox mv /system/vendor/* /vendor
 
 /tmp/busybox mkdir -p /vendor/app
