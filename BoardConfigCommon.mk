@@ -119,7 +119,7 @@ BOARD_USE_LEGACY_TOUCHSCREEN := true
 # would hurt performance significantly (see b/6016711)
 TARGET_DISABLE_TRIPLE_BUFFERING := false
 
-BOARD_ALLOW_EGL_HIBERNATION := true
+BOARD_ALLOW_EGL_HIBERNATION := false
 
 # hwcomposer: custom vsync ioctl
 BOARD_CUSTOM_VSYNC_IOCTL := true
