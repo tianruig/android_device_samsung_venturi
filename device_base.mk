@@ -174,7 +174,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	persist.sys.usb.config=mass_storage \
 	ro.vold.switchablepair=/storage/sdcard0,/storage/sdcard1 \
-	persist.sys.vold.switchexternal=0
+	persist.sys.vold.switchexternal=0 \
+	ro.bq.gpu_to_cpu_unsupported=1
 
 include frameworks/native/build/phone-hdpi-512-dalvik-heap.mk
 
