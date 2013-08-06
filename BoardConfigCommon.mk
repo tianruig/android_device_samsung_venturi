@@ -104,6 +104,8 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/venturi/recovery/graphics.c
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/venturi/shbootimg.mk
 TARGET_RECOVERY_PRE_COMMAND := "echo 1 > /cache/.startrecovery; sync;"
+TARGET_RECOVERY_FSTAB := device/samsung/venturi/fstab.venturi
+RECOVERY_FSTAB_VERSION := 2
 
 # Boot Animation
 TARGET_BOOTANIMATION_PRELOAD := true

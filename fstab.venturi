@@ -1,11 +1,20 @@
 # Android fstab file.
-#<src>                     <mnt_point>         <type>    <mnt_flags and options>        <fs_mgr_flags>
+#<src>                     <mnt_point>         <type>    <mnt_flags and options>                                            <fs_mgr_flags>
 # The filesystem that contains the filesystem checker binary (typically /system) cannot
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
-/dev/block/mmcblk0p13      /system             ext4      ro						       wait
-/dev/block/mmcblk0p15      /cache              ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait
-/dev/block/mmcblk0p14      /system/vendor      ext4      ro						       wait
-/dev/block/mmcblk0p16      /data               ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait
+/dev/block/mmcblk0p10      /efs                vfat      recoveryonly
+/dev/block/mmcblk0p11      /boot               emmc      recoveryonly
+/dev/block/mmcblk0p12      /recovery           emmc      recoveryonly
+/dev/block/mmcblk0p13      /system             ext4      recoveryonly,ro				                    wait
+/dev/block/mmcblk0p15      /cache              ext4      recoveryonly,noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait
+/dev/block/mmcblk0p14      /system/vendor      ext4      recoveryonly,ro						    wait
+/dev/block/mmcblk0p16      /data               ext4      recoveryonly,noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait
+/dev/block/mmcblk0p17      /emmc               vfat      recoveryonly,lun=/sys/devices/platform/usb_mass_storage/lun0/file
+/dev/block/mmcblk1p1       /sdcard             vfat      recoveryonly,lun=/sys/devices/platform/usb_mass_storage/lun1/file
 
 /devices/platform/s3c-sdhci.0/mmc_host/mmc0 /storage/sdcard0 auto defaults voldmanaged=sdcard0:17
 /devices/platform/s3c-sdhci.2/mmc_host/mmc1 /storage/sdcard1 auto defaults voldmanaged=sdcard1:auto
+
+
+
+
