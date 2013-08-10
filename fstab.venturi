@@ -9,9 +9,8 @@
 /dev/block/mmcblk0p15      /cache              ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    recoveryonly,wait
 /dev/block/mmcblk0p14      /system/vendor      ext4      defaults                                              recoveryonly,wait
 /dev/block/mmcblk0p16      /data               ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    recoveryonly,wait
-/dev/block/mmcblk0p17      /emmc               vfat      defaults                                              recoveryonly,lun=/sys/devices/platform/usb_mass_storage/lun0/file
-/dev/block/mmcblk1p1       /sdcard             vfat      defaults                                              recoveryonly,lun=/sys/devices/platform/usb_mass_storage/lun1/file
 
+# SD Card
 /devices/platform/s3c-sdhci.0/mmc_host/mmc0 /storage/sdcard0 auto defaults voldmanaged=sdcard0:17
 /devices/platform/s3c-sdhci.2/mmc_host/mmc1 /storage/sdcard1 auto defaults voldmanaged=sdcard1:auto
 
