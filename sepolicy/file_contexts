@@ -8,6 +8,22 @@
 # Touchkey backlight
 /sys/devices/virtual/sec/ts/touchkey_led -- u:object_r:sysfs_device_writable:s0
 
+# Vibrator
+/dev/tspdrv			u:object_r:input_device:s0
+/sys/devices/virtual/misc/pwm_duty/pwm_duty -- u:object_r:sysfs_device_writable:s0
+
 # Vendor
 /vendor(/.*)?			u:object_r:system_file:s0
 
+
+# Sensors
+/system/vendor/bin/geomagneticd                     u:object_r:geomagneticd_exec:s0
+/system/vendor/bin/orientationd                     u:object_r:orientationd_exec:s0
+
+# Hardware codec
+/dev/s3c-mfc                                        u:object_r:mfc_device:s0
+/dev/s3c-jpg                                        u:object_r:mfc_device:s0
+
+# Advanced settings
+/sys/class/misc/pwm_duty/pwm_duty                   u:object_r:sysfs_writable:s0
+/sys/class/mdnieset_ui/switch_mdnieset_ui/mdnieset_ui_file_cmd  u:object_r:sysfs_writable:s0

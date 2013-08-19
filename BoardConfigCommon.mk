@@ -144,7 +144,10 @@ BOARD_SEPOLICY_UNION += \
 	domain.te \
 	file_contexts \
 	file.te \
+	geomagneticd.te \
 	init.te \
+	mediaserver.te \
+	orientationd.te \
 	pvrsrvinit.te \
 	system.te \
 	wpa_supplicant.te
