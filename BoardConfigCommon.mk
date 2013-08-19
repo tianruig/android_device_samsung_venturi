@@ -125,6 +125,12 @@ BOARD_ALLOW_EGL_HIBERNATION := false
 # hwcomposer: custom vsync ioctl
 BOARD_CUSTOM_VSYNC_IOCTL := true
 
+# Support for Browser's saved page feature. This allows
+# for pages saved on previous versions of the OS to be
+# viewed on the current OS.
+PRODUCT_PACKAGES += \
+    libskia_legacy
+
 # Charging mode
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/power_supply/battery/charging_mode_booting
 
