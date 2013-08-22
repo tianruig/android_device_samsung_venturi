@@ -35,7 +35,7 @@ def FullOTA_Assertions(info):
   info.script.AppendExtra(
         ('package_extract_file("restorecon.sh", "/tmp/restorecon.sh");\n'
          'set_perm(0, 0, 0777, "/tmp/restorecon.sh");'))
-  info.script.appendExtra(
+  info.script.AppendExtra(
        ('package_extract_file("make_ext4fs", "/tmp/make_ext4fs");\n'
         'set_perm(0, 0, 0777, "/tmp/make_ext4fs");'))
   info.script.AppendExtra(
