@@ -51,6 +51,7 @@ def FullOTA_Assertions(info):
 
 def FullOTA_InstallEnd(info):
   # Move files to /vendor
+  info.script.AppendExtra('format("ext4", "EMMC", "/dev/block/mmcblk0p14", "0", "/vendor");')
   info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/mmcblk0p14", "/vendor");')
   info.script.AppendExtra('run_program("/tmp/movefiles.sh");')
   info.script.AppendExtra('unmount("/vendor");')
