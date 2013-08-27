@@ -47,7 +47,6 @@ def FullOTA_Assertions(info):
 
   info.script.AppendExtra('package_extract_file("boot.img", "/tmp/boot.img");')
   info.script.AppendExtra('assert(run_program("/tmp/updater.sh") == 0);')
-  info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
 
 def FullOTA_InstallEnd(info):
   # Move files to /vendor
@@ -55,3 +54,5 @@ def FullOTA_InstallEnd(info):
   info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/mmcblk0p14", "/vendor");')
   info.script.AppendExtra('run_program("/tmp/movefiles.sh");')
   info.script.AppendExtra('unmount("/vendor");')
+
+  info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
