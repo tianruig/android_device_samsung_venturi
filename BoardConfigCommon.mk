@@ -59,6 +59,9 @@ BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/venturi/bluetooth
 BOARD_BLUEDROID_VENDOR_CONF := device/samsung/venturi/bluetooth/libbt_vndcfg.txt
 
+# Dalvik lower memory footprint
+TARGET_ARCH_LOWMEM := true
+
 # FM Radio
 BOARD_HAVE_FM_RADIO := true
 BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
