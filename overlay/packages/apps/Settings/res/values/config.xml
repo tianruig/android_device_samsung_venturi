@@ -19,4 +19,7 @@
     <!-- Show Expanded Desktop preference -->
     <bool name="config_show_expandedDesktop">true</bool>
     <bool name="config_show_volumeRockerWake">true</bool>
+
+    <!-- Show Home Button Wake Toggle-->
+    <bool name="config_show_homeWake">true</bool>
 </resources>
