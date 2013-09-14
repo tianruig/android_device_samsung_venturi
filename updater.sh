@@ -21,21 +21,44 @@ export PATH=/:/sbin:/system/xbin:/system/bin:/tmp:$PATH
 /tmp/busybox mkdir -p /data
 /tmp/busybox mkdir -p /vendor
 
-# make sure internal sdcard is mounted
-if ! /tmp/busybox grep -q /emmc /proc/mounts ; then
-    /tmp/busybox mkdir -p /emmc
-    /tmp/busybox umount -l /dev/block/mmcblk0p17
-    if ! /tmp/busybox mount -t vfat /dev/block/mmcblk0p17 /emmc ; then
-        /tmp/busybox echo "Cannot mount internal sdcard."
+check_mount() {
+    local MOUNT_POINT=`/tmp/busybox readlink $1`
+    if ! /tmp/busybox test -n "$MOUNT_POINT" ; then
+        # readlink does not work on older recoveries for some reason
+        # doesn't matter since the path is already correct in that case
+        /tmp/busybox echo "Using non-readlink mount point $1"
+        MOUNT_POINT=$1
+    fi
+    if ! /tmp/busybox grep -q $MOUNT_POINT /proc/mounts ; then
+        /tmp/busybox mkdir -p $MOUNT_POINT
+        /tmp/busybox umount -l $2
+        if ! /tmp/busybox mount -t $3 $2 $MOUNT_POINT ; then
+            /tmp/busybox echo "Cannot mount $1 ($MOUNT_POINT)."
         exit 1
     fi
 fi
+}
 
-# remove old log
-rm -rf /emmc/cyanogenmod.log
+set_log() {
+    rm -rf $1
+    exec >> $1 2>&1
+}
 
-# everything is logged into /emmc/cyanogenmod.log
-exec >> /emmc/cyanogenmod.log 2>&1
+fix_package_location() {
+    local PACKAGE_LOCATION=$1
+    # Remove leading /mnt
+    PACKAGE_LOCATION=${PACKAGE_LOCATION#/mnt}
+    # Convert to modern sdcard path
+    PACKAGE_LOCATION=`echo $PACKAGE_LOCATION | /tmp/busybox sed -e "s|^/sdcard|/storage/sdcard0|"`
+    PACKAGE_LOCATION=`echo $PACKAGE_LOCATION | /tmp/busybox sed -e "s|^/emmc|/storage/sdcard1|"`
+    echo $PACKAGE_LOCATION
+}
+
+# make sure sdcard is mounted
+check_mount /mnt/sdcard mmcblk0p17 vfat
+
+# everything is logged into /mnt/sdcard/cyanogenmod_bml.log
+set_log /mnt/sdcard/cyanogenmod.log
 
 #
 # filesystem conversion
