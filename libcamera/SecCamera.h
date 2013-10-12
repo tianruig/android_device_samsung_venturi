@@ -2,6 +2,7 @@
 **
 ** Copyright 2008, The Android Open Source Project
 ** Copyright 2010, Samsung Electronics Co. LTD
+** Copyright 2011, The CyanogenMod Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -43,7 +44,8 @@
 
 namespace android {
 
-#define ENABLE_ESD_PREVIEW_CHECK
+// Not supported by CE147
+// #define ENABLE_ESD_PREVIEW_CHECK
 
 #if defined(LOG_NDEBUG) && LOG_NDEBUG == 0
 #define LOG_CAMERA ALOGD
@@ -74,28 +76,28 @@ namespace android {
 #define JOIN_AGAIN(x, y) x ## y
 
 #define FRONT_CAM VGA
-#define BACK_CAM S5K5CCGX
+#define BACK_CAM S5K4ECGX
 
 #if !defined (FRONT_CAM) || !defined(BACK_CAM)
 #error "Please define the Camera module"
 #endif
 
-#define S5K5CCGX_PREVIEW_WIDTH            640
-#define S5K5CCGX_PREVIEW_HEIGHT           480
-#define S5K5CCGX_SNAPSHOT_WIDTH           2048
-#define S5K5CCGX_SNAPSHOT_HEIGHT          1536
+#define S5K4ECGX_PREVIEW_WIDTH            1280
+#define S5K4ECGX_PREVIEW_HEIGHT           720
+#define S5K4ECGX_SNAPSHOT_WIDTH           2560
+#define S5K4ECGX_SNAPSHOT_HEIGHT          1920
 
-#define S5K5CCGX_POSTVIEW_WIDTH           320
-#define S5K5CCGX_POSTVIEW_WIDE_WIDTH      320
-#define S5K5CCGX_POSTVIEW_HEIGHT          240
-#define S5K5CCGX_POSTVIEW_BPP             16
+#define S5K4ECGX_POSTVIEW_WIDTH           640
+#define S5K4ECGX_POSTVIEW_WIDE_WIDTH      800
+#define S5K4ECGX_POSTVIEW_HEIGHT          480
+#define S5K4ECGX_POSTVIEW_BPP             16
 
-#define S5K5CCGX_THUMBNAIL_WIDTH          320
-#define S5K5CCGX_THUMBNAIL_HEIGHT         240
-#define S5K5CCGX_THUMBNAIL_BPP            16
+#define S5K4ECGX_THUMBNAIL_WIDTH          320
+#define S5K4ECGX_THUMBNAIL_HEIGHT         240
+#define S5K4ECGX_THUMBNAIL_BPP            16
 
 /* focal length of 3.43mm */
-#define S5K5CCGX_FOCAL_LENGTH             343
+#define S5K4ECGX_FOCAL_LENGTH             343
 
 #define VGA_PREVIEW_WIDTH               640
 #define VGA_PREVIEW_HEIGHT              480
@@ -145,13 +147,12 @@ namespace android {
 
 #define BPP             2
 #define MIN(x, y)       (((x) < (y)) ? (x) : (y))
-#define MAX_BUFFERS     9 // 11
+#define MAX_BUFFERS     8
 
-#define FIRST_AF_SEARCH_COUNT 80
-#define SECOND_AF_SEARCH_COUNT 80
-#define AF_PROGRESS 0x01
+#define FIRST_AF_SEARCH_COUNT 600
+#define AF_PROGRESS 0x05
 #define AF_SUCCESS 0x02
-#define AF_DELAY 50000
+#define AF_DELAY 10000
 
 /*
  * V 4 L 2   F I M C   E X T E N S I O N S
