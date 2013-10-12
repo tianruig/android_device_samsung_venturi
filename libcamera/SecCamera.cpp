@@ -769,37 +769,6 @@ int SecCamera::startPreview(void)
         CHECK(ret);
     }
 
-    if (m_camera_id == CAMERA_ID_BACK) {
-        // Init some parameters required for CE147
-        // Force antibanding for back camera - only value supported
-        m_anti_banding = ANTI_BANDING_50HZ;
-
-        // It doesn't hurt to keep these on as the kernel camera driver only
-        // enables it when recording HD video. Turning it on before recording
-        // doesn't work because it needs to be set before the preview is started.
-        m_video_gamma = GAMMA_ON;
-        m_slow_ae = SLOW_AE_ON;
-
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_ANTI_BANDING, m_anti_banding);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_ISO, m_params->iso);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_BRIGHTNESS, m_params->brightness);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_FRAME_RATE, m_params->capture.timeperframe.denominator);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_METERING, m_params->metering);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_SET_GAMMA, m_video_gamma);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_SET_SLOW_AE, m_slow_ae);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_EFFECT, m_params->effects);
-        CHECK(ret);
-        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_WHITE_BALANCE, m_params->white_balance);
-        CHECK(ret);
-    }
-
     ret = fimc_v4l2_streamon(m_cam_fd);
     CHECK(ret);
 
