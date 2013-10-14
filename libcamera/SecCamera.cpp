@@ -877,15 +877,12 @@ int SecCamera::startRecord(void)
         // Some properties for back camera video recording
         setISO(ISO_MOVIE);
         setMetering(METERING_MATRIX);
-        setBatchReflection();
+        setBatchReflection(); 
+    }
 
-        ret = fimc_v4l2_s_fmt(m_cam_fd2, m_recording_width,
+	ret = fimc_v4l2_s_fmt(m_cam_fd2, m_recording_width,
                               m_recording_height, V4L2_PIX_FMT_NV12T, 0);
-    }
-    else {
-        ret = fimc_v4l2_s_fmt(m_cam_fd2, m_recording_height,
-                              m_recording_width, V4L2_PIX_FMT_NV12T, 0);
-    }
+
     CHECK(ret);
 
     ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_FRAME_RATE,
