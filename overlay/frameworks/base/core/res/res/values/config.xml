@@ -56,8 +56,8 @@
     <!-- There is no charging LED. -->
     <bool name="config_unplugTurnsOnScreen">false</bool>
 
-    <!-- Our amoled doesn't animate well. -->
-    <bool name="config_animateScreenLights">false</bool>
+    <!-- Set to false to enable CRT screen-off animation. -->
+    <bool name="config_animateScreenLights">true</bool>
 
     <!-- disable menu hard key on Crespo in non-pattern lockscreen -->
     <bool name="config_disableMenuKeyInLockScreen">true</bool>
