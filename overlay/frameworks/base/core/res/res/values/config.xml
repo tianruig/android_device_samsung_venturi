@@ -49,46 +49,18 @@
     <bool name="config_showNavigationBar">false</bool>
 
     <!-- Flag indicating whether we should enable the automatic brightness in Settings.
-         config_hardware_automatic_brightness_available is not set, so we will use software implementation -->
-    <bool name="config_automatic_brightness_available">true</bool>
+         config_hardware_automatic_brightness_available is not set, so we will use software implementation
+	 Venturi does not have a light sensor, so disable this-->
+    <bool name="config_automatic_brightness_available">false</bool>
 
     <!-- There is no charging LED. -->
-    <bool name="config_unplugTurnsOnScreen">true</bool>
+    <bool name="config_unplugTurnsOnScreen">false</bool>
 
     <!-- Our amoled doesn't animate well. -->
     <bool name="config_animateScreenLights">false</bool>
 
     <!-- disable menu hard key on Crespo in non-pattern lockscreen -->
     <bool name="config_disableMenuKeyInLockScreen">true</bool>
-
-    <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
-         The N entries of this array define N + 1 zones as follows:
-
-         Zone 0:        0 <= LUX < array[0]
-         Zone 1:        array[0] <= LUX < array[1]
-         ...
-         Zone N:        array[N - 1] <= LUX < array[N]
-         Zone N + 1:    array[N] <= LUX < infinity
-
-         Must be overridden in platform specific overlays -->
-    <integer-array name="config_autoBrightnessLevels">
-        <item>30</item>
-        <item>2000</item>
-        <item>6000</item>
-        <item>11000</item>
-    </integer-array>
-
-    <!-- Array of output values for LCD backlight corresponding to the LUX values
-         in the config_autoBrightnessLevels array.  This array should have size one greater
-         than the size of the config_autoBrightnessLevels array.
-    -->
-    <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>32</item>
-        <item>70</item>
-        <item>116</item>
-        <item>177</item>
-        <item>253</item>
-    </integer-array>
 
     <!-- Array of output values for button backlight corresponding to the LUX values
          in the config_autoBrightnessLevels array.  This array should have size one greater
@@ -120,12 +92,6 @@
     <integer name="config_deskDockKeepsScreenOn">0</integer>
     <integer name="config_carDockKeepsScreenOn">1</integer>
 
-    <!-- Default color for notification LED is white -->
-    <color name="config_defaultNotificationColor">#ffffffff</color>
-
-    <!-- Default blink frequency for notification LED is 9 seconds. -->
-    <integer name="config_defaultNotificationLedOff">9000</integer>
-
     <string-array name="config_locationProviderPackageNames" translatable="false">
         <item>com.android.location.fused</item>
         <item>com.google.android.location</item>
@@ -154,7 +120,7 @@
     <bool name="config_sf_slowBlur">true</bool>
 
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveNotificationLed">true</bool>
+    <bool name="config_intrusiveNotificationLed">false</bool>
 
     <bool name="config_ui_enableFadingMarquee">false</bool>
 
