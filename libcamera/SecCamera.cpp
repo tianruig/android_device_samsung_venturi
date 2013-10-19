@@ -712,10 +712,7 @@ int SecCamera::startPreview(void)
     int ret = fimc_v4l2_enum_fmt(m_cam_fd,m_preview_v4lformat);
     CHECK(ret);
 
-    if (m_camera_id == CAMERA_ID_BACK)
     ret = fimc_v4l2_s_fmt(m_cam_fd, m_preview_width,m_preview_height,m_preview_v4lformat, 0);
-    else
-        ret = fimc_v4l2_s_fmt(m_cam_fd, m_preview_height,m_preview_width,m_preview_v4lformat, 0);
     CHECK(ret);
 
     ret = fimc_v4l2_reqbufs(m_cam_fd, V4L2_BUF_TYPE_VIDEO_CAPTURE, MAX_BUFFERS);
