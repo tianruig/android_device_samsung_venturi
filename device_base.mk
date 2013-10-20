@@ -111,6 +111,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	SamsungServiceMode
 
+# Torch
+PRODUCT_PACKAGES += \
+	Torch
+
 # Charger
 PRODUCT_PACKAGES += \
 	charger \
