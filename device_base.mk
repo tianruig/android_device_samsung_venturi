@@ -189,6 +189,10 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_PROPERTY_OVERRIDES += \
        ro.hwui.disable_scissor_opt=true
 
+# venturi is a low ram device
+PRODUCT_PROPERTY_OVERRIDES += \
+       ro.config.low_ram=true
+
 # Conversion files
 PRODUCT_COPY_FILES += \
 	device/samsung/venturi/updater.sh:updater.sh \
