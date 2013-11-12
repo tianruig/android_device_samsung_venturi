@@ -63,6 +63,10 @@ BOARD_BLUEDROID_VENDOR_CONF := device/samsung/venturi/bluetooth/libbt_vndcfg.txt
 # Dalvik lower memory footprint
 TARGET_ARCH_LOWMEM := true
 
+# Framework sync
+TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
+
+
 # FM Radio
 BOARD_HAVE_FM_RADIO := true
 BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
@@ -145,7 +149,7 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
-    device/samsung/venturi/sepolicy
+	device/samsung/venturi/sepolicy
 
 BOARD_SEPOLICY_UNION += \
         device.te \
