@@ -15,8 +15,8 @@
 /dev/block/mmcblk0p16      /data               ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait
 
 # SD Card
-/devices/platform/s3c-sdhci.0/mmc_host/mmc0 /storage/sdcard0 auto defaults voldmanaged=sdcard0:17
-/devices/platform/s3c-sdhci.2/mmc_host/mmc1 /storage/sdcard1 auto defaults voldmanaged=sdcard1:auto
+/devices/platform/s3c-sdhci.0/mmc_host/mmc0 auto auto defaults voldmanaged=sdcard0:17,noemulatedsd
+/devices/platform/s3c-sdhci.2/mmc_host/mmc1 auto auto defaults voldmanaged=sdcard1:auto,noemulatedsd
 
 # USB Disk
-/devices/platform/s3c-usbgadget             /storage/usbdisk auto defaults voldmanaged=usbdisk:auto
+/devices/platform/s3c-usbgadget             auto auto defaults voldmanaged=usbdisk:auto
