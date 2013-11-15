@@ -45,7 +45,7 @@ ARCH_ARM_HIGH_OPTIMIZATION_COMPAT := true
 TARGET_KERNEL_SOURCE := kernel/samsung/venturi
 BOARD_KERNEL_BASE := 0x30008000
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_KERNEL_CMDLINE := console=ttyFIQ0,115200 init=/init no_console_suspend
+BOARD_KERNEL_CMDLINE := console=ttyFIQ0,115200 init=/init no_console_suspend androidboot.selinux=permissive
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/samsung/venturi
