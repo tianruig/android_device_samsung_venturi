@@ -180,10 +180,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	persist.sys.vold.switchexternal=0 \
 	ro.bq.gpu_to_cpu_unsupported=1
 
-# Enable Low Ram Device flag
-PRODUCT_PROPERTY_OVERRIDES += \
-       ro.config.low_ram=true
-
 include frameworks/native/build/phone-hdpi-512-dalvik-heap.mk
 
 # we have enough storage space to hold precise GC data
