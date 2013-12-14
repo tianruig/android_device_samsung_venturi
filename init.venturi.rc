@@ -60,9 +60,10 @@ on fs
     chown radio radio /sys/class/sec/uart_switch/UART_SEL/value
     chmod 660 /sys/class/sec/uart_switch/UART_SEL/value
 
-# load wifi module
+# load kernel modules
     insmod /system/lib/modules/bcmdhd.ko
     insmod /system/lib/modules/vibrator.ko
+    insmod /system/lib/modules/fuse.ko
 
 on post-fs
 
