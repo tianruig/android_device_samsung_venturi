@@ -1,5 +1,15 @@
 import usb.rc # Renamed init.venturi.usb.rc, we can't use init*.rc because the build script will delete it
 
+on init
+	export PATH /sbin
+	export LD_LIBRARY_PATH .:/sbin
+
+	# Makes adb available without having to mount /system
+	export MKSH=/sbin/sh
+	export SHELL/sbin/sh
+	mkdir /system/bin 0770 root root
+	symlink /sbin/sh /system/bin/sh
+
 on fs
 # set up LVM volumes
     exec /lvm/sbin/lvm vgscan --mknodes --ignorelockingfailure
