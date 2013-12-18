@@ -112,6 +112,16 @@ TARGET_RECOVERY_PRE_COMMAND := "echo 1 > /cache/.startrecovery; sync;"
 TARGET_RECOVERY_FSTAB := device/samsung/venturi/fstab.venturi
 RECOVERY_FSTAB_VERSION := 2
 
+#LVM
+#LVM to ramdisks
+PRODUCT_COPY_FILES += device/samsung/venturi/lvm/etc/lvm.conf:root/lvm/etc/lvm.conf
+PRODUCT_COPY_FILES += device/samsung/venturi/lvm/sbin/lvm:root/lvm/sbin/lvm
+#LVM to updatezip
+PRODUCT_COPY_FILES += device/samsung/venturi/lvm/etc/lvm.conf:lvm/etc/lvm.conf
+PRODUCT_COPY_FILES += device/samsung/venturi/lvm/sbin/lvm:lvm/sbin/lvm
+#LVM Conversion...
+PRODUCT_COPY_FILES += device/samsung/venturi/fstab:fstab
+
 # Boot Animation
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
@@ -159,3 +169,4 @@ BOARD_SEPOLICY_UNION += \
 	pvrsrvinit.te \
 	system.te \
 	wpa_supplicant.te
+

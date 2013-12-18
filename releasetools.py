@@ -26,6 +26,10 @@ def FullOTA_Assertions(info):
   info.output_zip.write(os.path.join(TARGET_DIR, "updater.sh"), "updater.sh")
   info.output_zip.write(os.path.join(TARGET_DIR, "restorecon.sh"), "restorecon.sh")
   info.output_zip.write(os.path.join(TARGET_DIR, "movefiles.sh"), "movefiles.sh")
+  info.output_zip.write(os.path.join(TARGET_DIR, "lvm/sbin/lvm"), "lvm/sbin/lvm")
+  info.output_zip.write(os.path.join(TARGET_DIR, "lvm/etc/lvm.conf"), "lvm/etc/lvm.conf")
+  info.output_zip.write(os.path.join(TARGET_DIR, "twrp.fstab"), "twrp.fstab")
+  info.output_zip.write(os.path.join(TARGET_DIR, "fstab"), "fstab")
   info.output_zip.write(os.path.join(UTILITIES_DIR, "make_ext4fs"), "make_ext4fs")
   info.output_zip.write(os.path.join(UTILITIES_DIR, "busybox"), "busybox")
 
@@ -44,9 +48,52 @@ def FullOTA_Assertions(info):
   info.script.AppendExtra(
         ('package_extract_file("movefiles.sh", "/tmp/movefiles.sh");\n'
          'set_perm(0, 0, 0777, "/tmp/movefiles.sh");'))
+  #Copy temporary replacement fstab's to temp
+  info.script.AppendExtra(
+        ('package_extract_file("twrp.fstab", "/tmp/twrp.fstab");\n'
+         'set_perm(0, 0, 0777, "/tmp/twrp.fstab");'))
+  info.script.AppendExtra(
+        ('package_extract_file("fstab", "/tmp/fstab");\n'
+         'set_perm(0, 0, 0777, "/tmp/fstab");'))
+  #Create directories for LVM
+  info.script.AppendExtra(
+        ('run_program("/tmp/busybox","mkdir","lvm");')) 
+  info.script.AppendExtra(
+        ('run_program("/tmp/busybox", "mkdir", "lvm/sbin");')) 
+  info.script.AppendExtra(
+        ('run_program("/tmp/busybox", "mkdir", "lvm/etc");'))
+  #Extract LVM files
+  info.script.AppendExtra(
+        ('package_extract_file("lvm/sbin/lvm", "/lvm/sbin/lvm");\n'
+         'set_perm(0, 0, 0777, "/lvm/sbin/lvm");'))
+  info.script.AppendExtra(
+        ('package_extract_file("lvm/etc/lvm.conf", "/lvm/etc/lvm.conf");\n'
+         'set_perm(0, 0, 0777, "lvm/etc/lvm.conf");'))
+  
+  info.script.AppendExtra('ui_print("");')
+  info.script.AppendExtra('ui_print("");')
+  info.script.AppendExtra('ui_print("===================================");')
+  info.script.AppendExtra('ui_print("IF this ROMs partition layout is   |");')
+  info.script.AppendExtra('ui_print("incompatible, This installer will  |");')
+  info.script.AppendExtra('ui_print("error the first time you flash...  |");')
+  info.script.AppendExtra('ui_print("IN THAT CASE:                      |");')
+  info.script.AppendExtra('ui_print("Flash AGAIN and /system and /data  |");')
+  info.script.AppendExtra('ui_print("will be ERASED and installation    |");')
+  info.script.AppendExtra('ui_print("will continue as normal.           |");')
+  info.script.AppendExtra('ui_print("===================================");')
+  info.script.AppendExtra('ui_print("");')
+  info.script.AppendExtra('ui_print("");')
 
   info.script.AppendExtra('package_extract_file("boot.img", "/tmp/boot.img");')
   info.script.AppendExtra('assert(run_program("/tmp/updater.sh") == 0);')
+
+  # switch to new LVM fstab now that lvpools have been created.
+  # /system: old (/dev/block/mmcblk0p13) new: (/dev/lvpool/system)
+  # /data: old (/dev/block/mmcblk0p16) new: (/dev/lvpool/data)
+  info.script.AppendExtra('run_program("/tmp/busybox", "rm", "/etc/recovery.fstab");')
+  info.script.AppendExtra('run_program("/tmp/busybox", "rm", "/etc/fstab");')
+  info.script.AppendExtra('symlink("/tmp/twrp.fstab", "/etc/recovery.fstab");')
+  info.script.AppendExtra('symlink("/tmp/fstab", "/etc/fstab");')
 
 def FullOTA_InstallEnd(info):
   # Move files to /vendor
@@ -56,3 +103,6 @@ def FullOTA_InstallEnd(info):
   info.script.AppendExtra('unmount("/vendor");')
 
   info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
+
+
+

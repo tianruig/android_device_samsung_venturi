@@ -19,6 +19,10 @@ on init
     symlink /storage/usbdisk /mnt/usbdisk
     symlink /mnt/usbdisk /usbdisk
 
+
+# Make lvm executable
+    chmod 0777 /lvm/sbin/lvm
+
 # We chown/chmod /efs because mount is run as root + defaults
     mkdir /efs 0771 system system
     chown system system /efs
@@ -36,6 +40,13 @@ on boot
     setprop ro.radio.noril yes
 
 on fs
+
+# LVM: Wait for block devices to become available, then set up LVM
+# volumes
+    wait /dev/block/mmcblk0
+    start lvm_vgscan
+    start lvm_vgchange
+    
     mount_all fstab.venturi
 
 # SEC_DMCRYPT for MC_CRYPT_ROOT before apply_disk_policy or apply_sec_devenc_init
@@ -60,10 +71,6 @@ on fs
     chown radio radio /sys/class/sec/uart_switch/UART_SEL/value
     chmod 660 /sys/class/sec/uart_switch/UART_SEL/value
 
-# load kernel modules
-    insmod /system/lib/modules/bcmdhd.ko
-    insmod /system/lib/modules/vibrator.ko
-    insmod /system/lib/modules/fuse.ko
 
 on post-fs
 
@@ -79,6 +86,11 @@ on post-fs
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
 
 on post-fs-data
+
+    # load kernel modules
+    insmod /system/lib/modules/bcmdhd.ko
+    insmod /system/lib/modules/vibrator.ko
+    insmod /system/lib/modules/fuse.ko
 
     # wi-fi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
