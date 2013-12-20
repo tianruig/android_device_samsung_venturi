@@ -196,7 +196,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Conversion files
 PRODUCT_COPY_FILES += \
 	device/samsung/venturi/updater.sh:updater.sh \
-	device/samsung/venturi/movefiles.sh:movefiles.sh \
 	device/samsung/venturi/restorecon.sh:restorecon.sh
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)

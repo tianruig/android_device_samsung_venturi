@@ -25,7 +25,6 @@ UTILITIES_DIR = os.path.join(TARGET_DIR, 'utilities')
 def FullOTA_Assertions(info):
   info.output_zip.write(os.path.join(TARGET_DIR, "updater.sh"), "updater.sh")
   info.output_zip.write(os.path.join(TARGET_DIR, "restorecon.sh"), "restorecon.sh")
-  info.output_zip.write(os.path.join(TARGET_DIR, "movefiles.sh"), "movefiles.sh")
   info.output_zip.write(os.path.join(TARGET_DIR, "lvm/sbin/lvm"), "lvm/sbin/lvm")
   info.output_zip.write(os.path.join(TARGET_DIR, "lvm/etc/lvm.conf"), "lvm/etc/lvm.conf")
   info.output_zip.write(os.path.join(TARGET_DIR, "twrp.fstab"), "twrp.fstab")
@@ -45,9 +44,6 @@ def FullOTA_Assertions(info):
   info.script.AppendExtra(
         ('package_extract_file("busybox", "/tmp/busybox");\n'
          'set_perm(0, 0, 0777, "/tmp/busybox");'))
-  info.script.AppendExtra(
-        ('package_extract_file("movefiles.sh", "/tmp/movefiles.sh");\n'
-         'set_perm(0, 0, 0777, "/tmp/movefiles.sh");'))
   #Copy temporary replacement fstab's to temp
   info.script.AppendExtra(
         ('package_extract_file("twrp.fstab", "/tmp/twrp.fstab");\n'
@@ -96,12 +92,6 @@ def FullOTA_Assertions(info):
   info.script.AppendExtra('symlink("/tmp/fstab", "/etc/fstab");')
 
 def FullOTA_InstallEnd(info):
-  # Move files to /vendor
-  info.script.AppendExtra('format("ext4", "EMMC", "/dev/block/mmcblk0p14", "0", "/vendor");')
-  info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/mmcblk0p14", "/vendor");')
-  info.script.AppendExtra('run_program("/tmp/movefiles.sh");')
-  info.script.AppendExtra('unmount("/vendor");')
-
   info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
 
 

@@ -9,11 +9,15 @@
 
 /dev/block/mmcblk0p11   /boot		    emmc         defaults                                            recoveryonly
 /dev/block/mmcblk0p12   /recovery	    emmc         defaults                                            recoveryonly
-/dev/block/mmcblk0p14   /vendor 	    ext4         defaults                                            recoveryonly
+###### Removed
+#/dev/block/mmcblk0p14   /vendor 	    ext4         defaults                                            recoveryonly
+######
 /dev/block/mmcblk0p17   /sdcard		    vfat         defaults                                            recoveryonly,lun=/sys/devices/platform/s3c-usbgadget/gadget/lun0/file
 /dev/block/mmcblk1p1    /external_sd	    vfat         defaults                                            recoveryonly,lun=/sys/devices/platform/s3c-usbgadget/gadget/lun1/file
 
-/dev/block/mmcblk0p14      /system/vendor      ext4      ro						       wait
+###### Removed
+#/dev/block/mmcblk0p14      /system/vendor      ext4      ro						       wait
+######
 /dev/block/mmcblk0p15      /cache              ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic    wait
 
 ###### Removed
