@@ -19,10 +19,6 @@ on init
     symlink /storage/usbdisk /mnt/usbdisk
     symlink /mnt/usbdisk /usbdisk
 
-    chmod 0777 /sbin/busybox
-    mkdir /system/bin 0770 root root
-    symlink /sbin/busybox /system/bin/sh
-
 # Make lvm executable
     chmod 0777 /lvm/sbin/lvm
 
