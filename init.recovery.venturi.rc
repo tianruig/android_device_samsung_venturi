@@ -1,11 +1,18 @@
 import usb.rc # Renamed init.venturi.usb.rc, we can't use init*.rc because the build script will delete it
 
+on init
+	export PATH /sbin
+	export LD_LIBRARY_PATH .:/sbin
+
 on fs
-# set up LVM volumes
+    # LVM
+    chmod 0777 /lvm/sbin/lvm
+    wait /dev/block/mmcblk0
     exec /lvm/sbin/lvm vgscan --mknodes --ignorelockingfailure
     exec /lvm/sbin/lvm vgchange -aly --ignorelockingfailure
 
 on boot
+    
     write /dev/graphics/fb3 1
 
     # mass_storage support

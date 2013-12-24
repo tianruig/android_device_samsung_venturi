@@ -1,0 +1,5 @@
+/dev/block/mmcblk0p15 /cache ext4 rw
+/dev/lvpool/data /data ext4 rw
+/dev/lvpool/system /system ext4 rw
+/dev/block/mmcblk0p17 /sdcard vfat rw
+/dev/block/mmcblk1p1 /external_sd vfat rw
