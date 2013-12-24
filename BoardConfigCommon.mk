@@ -120,6 +120,7 @@ PRODUCT_COPY_FILES += device/samsung/venturi/lvm/sbin/lvm:root/lvm/sbin/lvm
 PRODUCT_COPY_FILES += device/samsung/venturi/lvm/etc/lvm.conf:lvm/etc/lvm.conf
 PRODUCT_COPY_FILES += device/samsung/venturi/lvm/sbin/lvm:lvm/sbin/lvm
 #LVM Conversion...
+PRODUCT_COPY_FILES += device/samsung/venturi/etc/twrp.fstab:twrp.fstab
 PRODUCT_COPY_FILES += device/samsung/venturi/fstab:fstab
 
 # Boot Animation

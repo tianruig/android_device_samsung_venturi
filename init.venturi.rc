@@ -19,7 +19,6 @@ on init
     symlink /storage/usbdisk /mnt/usbdisk
     symlink /mnt/usbdisk /usbdisk
 
-
 # Make lvm executable
     chmod 0777 /lvm/sbin/lvm
 

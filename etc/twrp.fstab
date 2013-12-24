@@ -1,0 +1,12 @@
+# mount point	fstype		device	
+#/system		ext4	/dev/block/mmcblk0p13
+#/data		ext4	/dev/block/mmcblk0p16	
+	
+/boot	 	emmc	/dev/block/mmcblk0p11
+/system         ext4    /dev/lvpool/system
+#/vendor		ext4	/dev/block/mmcblk0p14
+/data           ext4    /dev/lvpool/data
+/cache		ext4	/dev/block/mmcblk0p15
+/recovery	emmc	/dev/block/mmcblk0p12
+/internal_sd	vfat	/dev/block/mmcblk0p17	flags=display="Interal SDcard";storage;wipeingui
+/external_sd    vfat    /dev/block/mmcblk1p1    /dev/block/mmcblk1   flags=display="External SDcard";storage;wipeingui;removable
