@@ -1,0 +1,6 @@
+#!/sbin/busybox sh
+
+/sbin/busybox --list | while read LINE
+do
+	/sbin/busybox ln -s /sbin/busybox /sbin/$LINE
+done
