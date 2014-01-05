@@ -36,14 +36,13 @@
 #include <utils/RefBase.h>
 #include <linux/videodev2.h>
 #include <videodev2_samsung2.h>
-
 #include <utils/String8.h>
 
 #include "JpegEncoder.h"
 
 namespace android {
 
-#define ENABLE_ESD_PREVIEW_CHECK
+#define V4L2_CID_CAMERA_SET_FLASH		(V4L2_CID_PRIVATE_BASE + 121)
 
 #if defined(ALOG_NDEBUG) && LOG_NDEBUG == 0
 #define ALOG_CAMERA LOGD
@@ -80,12 +79,12 @@ namespace android {
 #error "Please define the Camera module"
 #endif
 
-#define S5K4ECGX_PREVIEW_WIDTH            1280
-#define S5K4ECGX_PREVIEW_HEIGHT           720
-#define S5K4ECGX_SNAPSHOT_WIDTH           2560
-#define S5K4ECGX_SNAPSHOT_HEIGHT          1920
+#define S5K4ECGX_PREVIEW_WIDTH            800
+#define S5K4ECGX_PREVIEW_HEIGHT           480
+#define S5K4ECGX_SNAPSHOT_WIDTH           800
+#define S5K4ECGX_SNAPSHOT_HEIGHT          480
 
-#define S5K4ECGX_POSTVIEW_WIDTH           640
+#define S5K4ECGX_POSTVIEW_WIDTH           800
 #define S5K4ECGX_POSTVIEW_WIDE_WIDTH      800
 #define S5K4ECGX_POSTVIEW_HEIGHT          480
 #define S5K4ECGX_POSTVIEW_BPP             16

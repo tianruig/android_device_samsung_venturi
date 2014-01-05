@@ -23,4 +23,3 @@ LOCAL_MODULE := camera.s5pc110
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
-

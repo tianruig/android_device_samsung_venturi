@@ -305,7 +305,7 @@ static int fimc_v4l2_enum_fmt(int fp, unsigned int fmt)
 
     while (ioctl(fp, VIDIOC_ENUM_FMT, &fmtdesc) == 0) {
         if (fmtdesc.pixelformat == fmt) {
-            ALOGV("passed fmt = %#x found pixel format[%d]: %s\n", fmt, fmtdesc.index, fmtdesc.description);
+            ALOGI("passed fmt = %#x found pixel format[%d]: %s\n", fmt, fmtdesc.index, fmtdesc.description);
             found = 1;
             break;
         }
@@ -389,7 +389,7 @@ static int fimc_v4l2_streamoff(int fp)
     enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     int ret;
 
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
     ret = ioctl(fp, VIDIOC_STREAMOFF, &type);
     if (ret < 0) {
         ALOGE("ERR(%s):VIDIOC_STREAMOFF failed\n", __func__);
@@ -482,7 +482,7 @@ static int fimc_v4l2_g_parm(int fp, struct v4l2_streamparm *streamparm)
         return -1;
     }
 
-    ALOGV("%s : timeperframe: numerator %d, denominator %d\n", __func__,
+    ALOGI("%s : timeperframe: numerator %d, denominator %d\n", __func__,
             streamparm->parm.capture.timeperframe.numerator,
             streamparm->parm.capture.timeperframe.denominator);
 
@@ -564,17 +564,17 @@ SecCamera::SecCamera() :
 
     memset(&m_capture_buf, 0, sizeof(m_capture_buf));
 
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 }
 
 SecCamera::~SecCamera()
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 }
 
 int SecCamera::initCamera(int index)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
     int ret = 0;
 
     if (!m_flag_init) {
@@ -589,7 +589,7 @@ int SecCamera::initCamera(int index)
             ALOGE("ERR(%s):Cannot open %s (error : %s)\n", __func__, CAMERA_DEV_NAME, strerror(errno));
             return -1;
         }
-        ALOGV("%s: open(%s) --> m_cam_fd %d", __FUNCTION__, CAMERA_DEV_NAME, m_cam_fd);
+        ALOGI("%s: open(%s) --> m_cam_fd %d", __FUNCTION__, CAMERA_DEV_NAME, m_cam_fd);
 
         ALOGE("initCamera: m_cam_fd(%d), m_jpeg_fd(%d)", m_cam_fd, m_jpeg_fd);
 
@@ -601,7 +601,7 @@ int SecCamera::initCamera(int index)
         CHECK(ret);
 
         m_cam_fd2 = open(CAMERA_DEV_NAME2, O_RDWR);
-        ALOGV("%s: open(%s) --> m_cam_fd2 = %d", __FUNCTION__, CAMERA_DEV_NAME2, m_cam_fd2);
+        ALOGI("%s: open(%s) --> m_cam_fd2 = %d", __FUNCTION__, CAMERA_DEV_NAME2, m_cam_fd2);
         if (m_cam_fd2 < 0) {
             ALOGE("ERR(%s):Cannot open %s (error : %s)\n", __func__, CAMERA_DEV_NAME2, strerror(errno));
             return -1;
@@ -644,14 +644,14 @@ int SecCamera::initCamera(int index)
 
 void SecCamera::resetCamera()
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
     DeinitCamera();
     initCamera(m_camera_id);
 }
 
 void SecCamera::DeinitCamera()
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     if (m_flag_init) {
 
@@ -691,7 +691,7 @@ int SecCamera::startPreview(void)
     v4l2_streamparm streamparm;
     struct sec_cam_parm *parms;
     parms = (struct sec_cam_parm*)&streamparm.parm.raw_data;
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     // aleady started
     if (m_flag_camera_start > 0) {
@@ -718,7 +718,7 @@ int SecCamera::startPreview(void)
     ret = fimc_v4l2_reqbufs(m_cam_fd, V4L2_BUF_TYPE_VIDEO_CAPTURE, MAX_BUFFERS);
     CHECK(ret);
 
-    ALOGV("%s : m_preview_width: %d m_preview_height: %d m_angle: %d\n",
+    ALOGI("%s : m_preview_width: %d m_preview_height: %d m_angle: %d\n",
             __func__, m_preview_width, m_preview_height, m_angle);
 
     ret = fimc_v4l2_s_ctrl(m_cam_fd,
@@ -792,7 +792,10 @@ int SecCamera::startPreview(void)
         CHECK_PTR(ret);
     }
 
-    ALOGV("%s: got the first frame of the preview\n", __func__);
+    ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_FLASH_MODE, m_params->flash_mode);
+    CHECK(ret);
+
+    ALOGI("%s: got the first frame of the preview\n", __func__);
 
     return 0;
 }
@@ -801,7 +804,7 @@ int SecCamera::stopPreview(void)
 {
     int ret;
 
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     if (m_flag_camera_start == 0) {
         ALOGW("%s: doing nothing because m_flag_camera_start is zero", __func__);
@@ -829,7 +832,7 @@ int SecCamera::startRecord(void)
 {
     int ret, i;
 
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     // aleady started
     if (m_flag_record_start > 0) {
@@ -849,14 +852,8 @@ int SecCamera::startRecord(void)
     ALOGI("%s: m_recording_width = %d, m_recording_height = %d\n",
          __func__, m_recording_width, m_recording_height);
 
-    if (m_camera_id == CAMERA_ID_BACK) {
-        ret = fimc_v4l2_s_fmt(m_cam_fd2, m_recording_width,
+    ret = fimc_v4l2_s_fmt(m_cam_fd2, m_recording_width,
                           m_recording_height, V4L2_PIX_FMT_NV12T, 0);
-    }
-    else {
-        ret = fimc_v4l2_s_fmt(m_cam_fd2, m_recording_height,
-                              m_recording_width, V4L2_PIX_FMT_NV12T, 0);
-    }
     CHECK(ret);
 
     ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_FRAME_RATE,
@@ -882,6 +879,12 @@ int SecCamera::startRecord(void)
     ret = fimc_poll(&m_events_c2);
     CHECK(ret);
 
+    // Continuous autofocus for main camera
+    if (m_camera_id == CAMERA_ID_BACK) {
+        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_CAF_START_STOP, 1);
+        CHECK(ret);
+    }
+
     m_flag_record_start = 1;
 
     return 0;
@@ -891,7 +894,7 @@ int SecCamera::stopRecord(void)
 {
     int ret;
 
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     if (m_flag_record_start == 0) {
         ALOGW("%s: doing nothing because m_flag_record_start is zero", __func__);
@@ -903,6 +906,11 @@ int SecCamera::stopRecord(void)
         return -1;
     }
 
+    // Continuous autofocus for main camera
+    if (m_camera_id == CAMERA_ID_BACK) {
+        ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_CAF_START_STOP, 0);
+        CHECK(ret);
+
         // Need to switch focus mode so that the camera can focus properly
         // after using caf.
         // Note: This bug is not affected when the original mode is macro
@@ -910,6 +918,7 @@ int SecCamera::stopRecord(void)
         int orig_mode = m_params->focus_mode;
         setFocusMode(FOCUS_MODE_MACRO);
         setFocusMode(orig_mode);
+    }
 
     m_flag_record_start = 0;
 
@@ -1034,28 +1043,29 @@ int SecCamera::releaseRecordFrame(int index)
 
 int SecCamera::setPreviewSize(int width, int height, int pixel_format)
 {
-    ALOGV("%s(width(%d), height(%d), format(%d))", __func__, width, height, pixel_format);
+    ALOGI("%s(width(%d), height(%d), format(%d))", __func__, width, height, pixel_format);
 
     int v4lpixelformat = pixel_format;
 
 #if defined(LOG_NDEBUG) && LOG_NDEBUG == 0
     if (v4lpixelformat == V4L2_PIX_FMT_YUV420)
-        ALOGV("PreviewFormat:V4L2_PIX_FMT_YUV420");
+        ALOGI("PreviewFormat:V4L2_PIX_FMT_YUV420");
     else if (v4lpixelformat == V4L2_PIX_FMT_NV12)
-        ALOGV("PreviewFormat:V4L2_PIX_FMT_NV12");
+        ALOGI("PreviewFormat:V4L2_PIX_FMT_NV12");
     else if (v4lpixelformat == V4L2_PIX_FMT_NV12T)
-        ALOGV("PreviewFormat:V4L2_PIX_FMT_NV12T");
+        ALOGI("PreviewFormat:V4L2_PIX_FMT_NV12T");
     else if (v4lpixelformat == V4L2_PIX_FMT_NV21)
-        ALOGV("PreviewFormat:V4L2_PIX_FMT_NV21");
+        ALOGI("PreviewFormat:V4L2_PIX_FMT_NV21");
     else if (v4lpixelformat == V4L2_PIX_FMT_YUV422P)
-        ALOGV("PreviewFormat:V4L2_PIX_FMT_YUV422P");
+        ALOGI("PreviewFormat:V4L2_PIX_FMT_YUV422P");
     else if (v4lpixelformat == V4L2_PIX_FMT_YUYV)
-        ALOGV("PreviewFormat:V4L2_PIX_FMT_YUYV");
+        ALOGI("PreviewFormat:V4L2_PIX_FMT_YUYV");
     else if (v4lpixelformat == V4L2_PIX_FMT_RGB565)
-        ALOGV("PreviewFormat:V4L2_PIX_FMT_RGB565");
+        ALOGI("PreviewFormat:V4L2_PIX_FMT_RGB565");
     else
-        ALOGV("PreviewFormat:UnknownFormat");
+        ALOGI("PreviewFormat:UnknownFormat");
 #endif
+
     m_preview_width  = width;
     m_preview_height = height;
     m_preview_v4lformat = v4lpixelformat;
@@ -1091,10 +1101,11 @@ int SecCamera::getPreviewPixelFormat(void)
 /*
  * Devide getJpeg() as two funcs, setSnapshotCmd() & getJpeg() because of the shutter sound timing.
  * Here, just send the capture cmd to camera ISP to start JPEG capture.
+ * Meticulus: Rear cam rereouted through getSnapshotandJpeg. This function is not used.
  */
 int SecCamera::setSnapshotCmd(void)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     int ret = 0;
 
@@ -1160,7 +1171,7 @@ int SecCamera::endSnapshot(void)
  */
 unsigned char* SecCamera::getJpeg(int *jpeg_size, unsigned int *phyaddr)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     int index, ret = 0;
     unsigned char *addr;
@@ -1186,7 +1197,7 @@ unsigned char* SecCamera::getJpeg(int *jpeg_size, unsigned int *phyaddr)
 
     ret = fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_STREAM_PAUSE, 0);
     CHECK_PTR(ret);
-    ALOGV("\nsnapshot dqueued buffer = %d snapshot_width = %d snapshot_height = %d, size = %d\n\n",
+    ALOGI("\nsnapshot dqueued buffer = %d snapshot_width = %d snapshot_height = %d, size = %d\n\n",
             index, m_snapshot_width, m_snapshot_height, *jpeg_size);
 
     addr = (unsigned char*)(m_capture_buf.start) + main_offset;
@@ -1204,7 +1215,7 @@ int SecCamera::getExif(unsigned char *pExifDst, unsigned char *pThumbSrc)
 {
     JpegEncoder jpgEnc;
 
-    ALOGV("%s : m_jpeg_thumbnail_width = %d, height = %d",
+    ALOGI("%s : m_jpeg_thumbnail_width = %d, height = %d",
          __func__, m_jpeg_thumbnail_width, m_jpeg_thumbnail_height);
     if ((m_jpeg_thumbnail_width > 0) && (m_jpeg_thumbnail_height > 0)) {
         int inFormat = JPG_MODESEL_YCBCR;
@@ -1249,10 +1260,10 @@ int SecCamera::getExif(unsigned char *pExifDst, unsigned char *pThumbSrc)
 
         jpgEnc.encode(&thumbSize, NULL);
 
-        ALOGV("%s : enableThumb set to true", __func__);
+        ALOGI("%s : enableThumb set to true", __func__);
         mExifInfo.enableThumb = true;
     } else {
-        ALOGV("%s : enableThumb set to false", __func__);
+        ALOGI("%s : enableThumb set to false", __func__);
         mExifInfo.enableThumb = false;
     }
 
@@ -1260,7 +1271,7 @@ int SecCamera::getExif(unsigned char *pExifDst, unsigned char *pThumbSrc)
 
     setExifChangedAttribute();
 
-    ALOGV("%s: calling jpgEnc.makeExif, mExifInfo.width set to %d, height to %d\n",
+    ALOGI("%s: calling jpgEnc.makeExif, mExifInfo.width set to %d, height to %d\n",
          __func__, mExifInfo.width, mExifInfo.height);
 
     jpgEnc.makeExif(pExifDst, &mExifInfo, &exifSize, true);
@@ -1279,7 +1290,7 @@ void SecCamera::getPostViewConfig(int *width, int *height, int *size)
         *height = BACK_CAMERA_POSTVIEW_HEIGHT;
         *size = BACK_CAMERA_POSTVIEW_WIDTH * BACK_CAMERA_POSTVIEW_HEIGHT * BACK_CAMERA_POSTVIEW_BPP / 8;
     }
-    ALOGV("[5B] m_preview_width : %d, mPostViewWidth = %d mPostViewHeight = %d mPostViewSize = %d",
+    ALOGI("[5B] m_preview_width : %d, mPostViewWidth = %d mPostViewHeight = %d mPostViewSize = %d",
             m_preview_width, *width, *height, *size);
 }
 
@@ -1303,10 +1314,13 @@ int SecCamera::getPostViewOffset(void)
     return m_postview_offset;
 }
 
+/*
+ *Rear Cam routed through here along with front cam.
+ */
 int SecCamera::getSnapshotAndJpeg(unsigned char *yuv_buf, unsigned char *jpeg_buf,
                                             unsigned int *output_size)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     int index;
     //unsigned int addr;
@@ -1340,27 +1354,32 @@ int SecCamera::getSnapshotAndJpeg(unsigned char *yuv_buf, unsigned char *jpeg_bu
 
 #if defined(LOG_NDEBUG) && LOG_NDEBUG == 0
     if (m_snapshot_v4lformat == V4L2_PIX_FMT_YUV420)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_YUV420");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_YUV420");
     else if (m_snapshot_v4lformat == V4L2_PIX_FMT_NV12)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_NV12");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_NV12");
     else if (m_snapshot_v4lformat == V4L2_PIX_FMT_NV12T)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_NV12T");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_NV12T");
     else if (m_snapshot_v4lformat == V4L2_PIX_FMT_NV21)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_NV21");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_NV21");
     else if (m_snapshot_v4lformat == V4L2_PIX_FMT_YUV422P)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_YUV422P");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_YUV422P");
     else if (m_snapshot_v4lformat == V4L2_PIX_FMT_YUYV)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_YUYV");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_YUYV");
     else if (m_snapshot_v4lformat == V4L2_PIX_FMT_UYVY)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_UYVY");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_UYVY");
     else if (m_snapshot_v4lformat == V4L2_PIX_FMT_RGB565)
-        ALOGV("SnapshotFormat:V4L2_PIX_FMT_RGB565");
+        ALOGI("SnapshotFormat:V4L2_PIX_FMT_RGB565");
     else
-        ALOGV("SnapshotFormat:UnknownFormat");
+        ALOGI("SnapshotFormat:UnknownFormat");
 #endif
 
     ALOG_TIME_START(1) // prepare
     int nframe = 1;
+    //flash on
+    fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_SET_FLASH, 1);
+    CHECK(ret);
+    fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_SET_FLASH, 0);
+    CHECK(ret);
 
     ret = fimc_v4l2_enum_fmt(m_cam_fd,m_snapshot_v4lformat);
     CHECK(ret);
@@ -1382,13 +1401,14 @@ int SecCamera::getSnapshotAndJpeg(unsigned char *yuv_buf, unsigned char *jpeg_bu
     fimc_poll(&m_events_c);
     index = fimc_v4l2_dqbuf(m_cam_fd);
     fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_STREAM_PAUSE, 0);
-    ALOGV("\nsnapshot dequeued buffer = %d snapshot_width = %d snapshot_height = %d\n\n",
+    ALOGI("\nsnapshot dequeued buffer = %d snapshot_width = %d snapshot_height = %d\n\n",
             index, m_snapshot_width, m_snapshot_height);
 
     ALOG_TIME_END(2)
 
     ALOGI("%s : calling memcpy from m_capture_buf", __func__);
     memcpy(yuv_buf, (unsigned char*)m_capture_buf.start, m_snapshot_width * m_snapshot_height * 2);
+
     ALOG_TIME_START(5) // post
     fimc_v4l2_streamoff(m_cam_fd);
     ALOG_TIME_END(5)
@@ -1396,6 +1416,12 @@ int SecCamera::getSnapshotAndJpeg(unsigned char *yuv_buf, unsigned char *jpeg_bu
     ALOG_CAMERA("getSnapshotAndJpeg intervals : stopPreview(%lu), prepare(%lu),"
                 " capture(%lu), memcpy(%lu), yuv2Jpeg(%lu), post(%lu)  us",
                     ALOG_TIME(0), LOG_TIME(1), LOG_TIME(2), LOG_TIME(3), LOG_TIME(4), LOG_TIME(5));
+    CHECK(ret);
+
+    //flash off
+    fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_SET_FLASH, 5);
+    CHECK(ret);
+
     /* JPEG encoding */
     JpegEncoder jpgEnc;
     int inFormat = JPG_MODESEL_YCBCR;
@@ -1468,7 +1494,7 @@ int SecCamera::getSnapshotAndJpeg(unsigned char *yuv_buf, unsigned char *jpeg_bu
 
 int SecCamera::setSnapshotSize(int width, int height)
 {
-    ALOGV("%s(width(%d), height(%d))", __func__, width, height);
+    ALOGI("%s(width(%d), height(%d))", __func__, width, height);
 
     m_snapshot_width  = width;
     m_snapshot_height = height;
@@ -1563,7 +1589,7 @@ int SecCamera::getCameraId(void)
 
 int SecCamera::setAutofocus(void)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     if (m_cam_fd <= 0) {
         ALOGE("ERR(%s):Camera was closed\n", __func__);
@@ -1584,14 +1610,14 @@ int SecCamera::getAutoFocusResult(void)
 
     af_result = fimc_v4l2_g_ctrl(m_cam_fd, V4L2_CID_CAMERA_AUTO_FOCUS_RESULT);
 
-    ALOGV("%s : returning %d", __func__, af_result);
+    ALOGI("%s : returning %d", __func__, af_result);
 
     return af_result;
 }
 
 int SecCamera::cancelAutofocus(void)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     if (m_cam_fd <= 0) {
         ALOGE("ERR(%s):Camera was closed\n", __func__);
@@ -1610,13 +1636,13 @@ int SecCamera::cancelAutofocus(void)
 
 int SecCamera::zoomIn(void)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
     return 0;
 }
 
 int SecCamera::zoomOut(void)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
     return 0;
 }
 
@@ -1624,7 +1650,7 @@ int SecCamera::zoomOut(void)
 
 int SecCamera::setFrameRate(int frame_rate)
 {
-    ALOGV("%s(FrameRate(%d))", __func__, frame_rate);
+    ALOGI("%s(FrameRate(%d))", __func__, frame_rate);
 
     if (frame_rate < FRAME_RATE_AUTO || FRAME_RATE_MAX < frame_rate )
         ALOGE("ERR(%s):Invalid frame_rate(%d)", __func__, frame_rate);
@@ -1646,7 +1672,7 @@ int SecCamera::setFrameRate(int frame_rate)
 
 int SecCamera::setVerticalMirror(void)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     if (m_cam_fd <= 0) {
         ALOGE("ERR(%s):Camera was closed\n", __func__);
@@ -1663,7 +1689,7 @@ int SecCamera::setVerticalMirror(void)
 
 int SecCamera::setHorizontalMirror(void)
 {
-    ALOGV("%s :", __func__);
+    ALOGI("%s :", __func__);
 
     if (m_cam_fd <= 0) {
         ALOGE("ERR(%s):Camera was closed\n", __func__);
@@ -1682,7 +1708,7 @@ int SecCamera::setHorizontalMirror(void)
 
 int SecCamera::setWhiteBalance(int white_balance)
 {
-    ALOGV("%s(white_balance(%d))", __func__, white_balance);
+    ALOGI("%s(white_balance(%d))", __func__, white_balance);
 
     if (white_balance <= WHITE_BALANCE_BASE || WHITE_BALANCE_MAX <= white_balance) {
         ALOGE("ERR(%s):Invalid white_balance(%d)", __func__, white_balance);
@@ -1704,7 +1730,7 @@ int SecCamera::setWhiteBalance(int white_balance)
 
 int SecCamera::getWhiteBalance(void)
 {
-    ALOGV("%s : white_balance(%d)", __func__, m_params->white_balance);
+    ALOGI("%s : white_balance(%d)", __func__, m_params->white_balance);
     return m_params->white_balance;
 }
 
@@ -1712,7 +1738,7 @@ int SecCamera::getWhiteBalance(void)
 
 int SecCamera::setBrightness(int brightness)
 {
-    ALOGV("%s(brightness(%d))", __func__, brightness);
+    ALOGI("%s(brightness(%d))", __func__, brightness);
 
     brightness += EV_DEFAULT;
 
@@ -1736,7 +1762,7 @@ int SecCamera::setBrightness(int brightness)
 
 int SecCamera::getBrightness(void)
 {
-    ALOGV("%s : brightness(%d)", __func__, m_params->brightness);
+    ALOGI("%s : brightness(%d)", __func__, m_params->brightness);
     return m_params->brightness;
 }
 
@@ -1744,7 +1770,7 @@ int SecCamera::getBrightness(void)
 
 int SecCamera::setImageEffect(int image_effect)
 {
-    ALOGV("%s(image_effect(%d))", __func__, image_effect);
+    ALOGI("%s(image_effect(%d))", __func__, image_effect);
 
     if (image_effect <= IMAGE_EFFECT_BASE || IMAGE_EFFECT_MAX <= image_effect) {
         ALOGE("ERR(%s):Invalid image_effect(%d)", __func__, image_effect);
@@ -1766,14 +1792,14 @@ int SecCamera::setImageEffect(int image_effect)
 
 int SecCamera::getImageEffect(void)
 {
-    ALOGV("%s : image_effect(%d)", __func__, m_params->effects);
+    ALOGI("%s : image_effect(%d)", __func__, m_params->effects);
     return m_params->effects;
 }
 
 //======================================================================
 int SecCamera::setSceneMode(int scene_mode)
 {
-    ALOGV("%s(scene_mode(%d))", __func__, scene_mode);
+    ALOGI("%s(scene_mode(%d))", __func__, scene_mode);
 
     if (scene_mode <= SCENE_MODE_BASE || SCENE_MODE_MAX <= scene_mode) {
         ALOGE("ERR(%s):Invalid scene_mode (%d)", __func__, scene_mode);
@@ -1802,7 +1828,9 @@ int SecCamera::getSceneMode(void)
 
 int SecCamera::setFlashMode(int flash_mode)
 {
-    ALOGV("%s(flash_mode(%d))", __func__, flash_mode);
+    ALOGI("%s(flash_mode(%d))", __func__, flash_mode);
+
+    int ret = 0;
 
     if (flash_mode <= FLASH_MODE_BASE || FLASH_MODE_MAX <= flash_mode) {
         ALOGE("ERR(%s):Invalid flash_mode (%d)", __func__, flash_mode);
@@ -1812,9 +1840,9 @@ int SecCamera::setFlashMode(int flash_mode)
     if (m_params->flash_mode != flash_mode) {
         m_params->flash_mode = flash_mode;
         if (m_flag_camera_start) {
-            if (fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_FLASH_MODE, flash_mode) < 0) {
-                ALOGE("ERR(%s):Fail on V4L2_CID_CAMERA_FLASH_MODE", __func__);
-                return -1;
+	    if (fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_FLASH_MODE, flash_mode) < 0) {
+                	ALOGE("ERR(%s):Fail on V4L2_CID_CAMERA_FLASH_MODE", __func__);
+                	return -1;
             }
         }
     }
@@ -1831,7 +1859,7 @@ int SecCamera::getFlashMode(void)
 
 int SecCamera::setISO(int iso_value)
 {
-    ALOGV("%s(iso_value(%d))", __func__, iso_value);
+    ALOGI("%s(iso_value(%d))", __func__, iso_value);
     if (iso_value < ISO_AUTO || ISO_MAX <= iso_value) {
         ALOGE("ERR(%s):Invalid iso_value (%d)", __func__, iso_value);
         return -1;
@@ -1859,7 +1887,7 @@ int SecCamera::getISO(void)
 
 int SecCamera::setContrast(int contrast_value)
 {
-    ALOGV("%s(contrast_value(%d))", __func__, contrast_value);
+    ALOGI("%s(contrast_value(%d))", __func__, contrast_value);
 
     if (contrast_value < CONTRAST_MINUS_2 || CONTRAST_MAX <= contrast_value) {
         ALOGE("ERR(%s):Invalid contrast_value (%d)", __func__, contrast_value);
@@ -1888,7 +1916,7 @@ int SecCamera::getContrast(void)
 
 int SecCamera::setSaturation(int saturation_value)
 {
-    ALOGV("%s(saturation_value(%d))", __func__, saturation_value);
+    ALOGI("%s(saturation_value(%d))", __func__, saturation_value);
 
     if (saturation_value <SATURATION_MINUS_2 || SATURATION_MAX<= saturation_value) {
         ALOGE("ERR(%s):Invalid saturation_value (%d)", __func__, saturation_value);
@@ -1917,7 +1945,7 @@ int SecCamera::getSaturation(void)
 
 int SecCamera::setSharpness(int sharpness_value)
 {
-    ALOGV("%s(sharpness_value(%d))", __func__, sharpness_value);
+    ALOGI("%s(sharpness_value(%d))", __func__, sharpness_value);
 
     if (sharpness_value < SHARPNESS_MINUS_2 || SHARPNESS_MAX <= sharpness_value) {
         ALOGE("ERR(%s):Invalid sharpness_value (%d)", __func__, sharpness_value);
@@ -1946,7 +1974,7 @@ int SecCamera::getSharpness(void)
 
 int SecCamera::setMetering(int metering_value)
 {
-    ALOGV("%s(metering (%d))", __func__, metering_value);
+    ALOGI("%s(metering (%d))", __func__, metering_value);
 
     if (metering_value <= METERING_BASE || METERING_MAX <= metering_value) {
         ALOGE("ERR(%s):Invalid metering_value (%d)", __func__, metering_value);
@@ -1975,7 +2003,7 @@ int SecCamera::getMetering(void)
 
 int SecCamera::setJpegQuality(int jpeg_quality)
 {
-    ALOGV("%s(jpeg_quality (%d))", __func__, jpeg_quality);
+    ALOGI("%s(jpeg_quality (%d))", __func__, jpeg_quality);
 
     if (jpeg_quality < JPEG_QUALITY_ECONOMY || JPEG_QUALITY_MAX <= jpeg_quality) {
         ALOGE("ERR(%s):Invalid jpeg_quality (%d)", __func__, jpeg_quality);
@@ -2004,7 +2032,7 @@ int SecCamera::getJpegQuality(void)
 
 int SecCamera::setZoom(int zoom_level)
 {
-    ALOGV("%s(zoom_level (%d))", __func__, zoom_level);
+    ALOGI("%s(zoom_level (%d))", __func__, zoom_level);
 
     if (zoom_level < ZOOM_LEVEL_0 || ZOOM_LEVEL_MAX <= zoom_level) {
         ALOGE("ERR(%s):Invalid zoom_level (%d)", __func__, zoom_level);
@@ -2033,7 +2061,7 @@ int SecCamera::getZoom(void)
 
 int SecCamera::setObjectTracking(int object_tracking)
 {
-    ALOGV("%s(object_tracking (%d))", __func__, object_tracking);
+    ALOGI("%s(object_tracking (%d))", __func__, object_tracking);
 
     if (object_tracking < OBJECT_TRACKING_OFF || OBJECT_TRACKING_MAX <= object_tracking) {
         ALOGE("ERR(%s):Invalid object_tracking (%d)", __func__, object_tracking);
@@ -2061,7 +2089,7 @@ int SecCamera::getObjectTrackingStatus(void)
 
 int SecCamera::setObjectTrackingStartStop(int start_stop)
 {
-    ALOGV("%s(object_tracking_start_stop (%d))", __func__, start_stop);
+    ALOGI("%s(object_tracking_start_stop (%d))", __func__, start_stop);
 
     if (m_object_tracking_start_stop != start_stop) {
         m_object_tracking_start_stop = start_stop;
@@ -2076,7 +2104,7 @@ int SecCamera::setObjectTrackingStartStop(int start_stop)
 
 int SecCamera::setTouchAFStartStop(int start_stop)
 {
-    ALOGV("%s(touch_af_start_stop (%d))", __func__, start_stop);
+    ALOGI("%s(touch_af_start_stop (%d))", __func__, start_stop);
 
     if (m_flag_camera_start) {
         // We need to send this command regardless of previous state to trigger AF
@@ -2094,7 +2122,7 @@ int SecCamera::setTouchAFStartStop(int start_stop)
 
 int SecCamera::setFocusMode(int focus_mode)
 {
-    ALOGV("%s(focus_mode(%d))", __func__, focus_mode);
+    ALOGI("%s(focus_mode(%d))", __func__, focus_mode);
 
     if (FOCUS_MODE_MAX <= focus_mode) {
         ALOGE("ERR(%s):Invalid focus_mode (%d)", __func__, focus_mode);
@@ -2124,7 +2152,7 @@ int SecCamera::getFocusMode(void)
 
 int SecCamera::setGPSLatitude(const char *gps_latitude)
 {
-    ALOGV("%s(gps_latitude(%s))", __func__, gps_latitude);
+    ALOGI("%s(gps_latitude(%s))", __func__, gps_latitude);
     if (gps_latitude == NULL)
         m_gps_enabled = false;
     else {
@@ -2149,13 +2177,13 @@ int SecCamera::setGPSLatitude(const char *gps_latitude)
         }
     }
 
-    ALOGV("%s(m_gps_latitude(%ld))", __func__, m_gps_latitude);
+    ALOGI("%s(m_gps_latitude(%ld))", __func__, m_gps_latitude);
     return 0;
 }
 
 int SecCamera::setGPSLongitude(const char *gps_longitude)
 {
-    ALOGV("%s(gps_longitude(%s))", __func__, gps_longitude);
+    ALOGI("%s(gps_longitude(%s))", __func__, gps_longitude);
     if (gps_longitude == NULL)
         m_gps_enabled = false;
     else {
@@ -2180,13 +2208,13 @@ int SecCamera::setGPSLongitude(const char *gps_longitude)
         }
     }
 
-    ALOGV("%s(m_gps_longitude(%ld))", __func__, m_gps_longitude);
+    ALOGI("%s(m_gps_longitude(%ld))", __func__, m_gps_longitude);
     return 0;
 }
 
 int SecCamera::setGPSAltitude(const char *gps_altitude)
 {
-    ALOGV("%s(gps_altitude(%s))", __func__, gps_altitude);
+    ALOGI("%s(gps_altitude(%s))", __func__, gps_altitude);
     if (gps_altitude == NULL)
         m_gps_altitude = 0;
     else {
@@ -2201,25 +2229,25 @@ int SecCamera::setGPSAltitude(const char *gps_altitude)
         gpsInfoAltitude.second = 0;
     }
 
-    ALOGV("%s(m_gps_altitude(%ld))", __func__, m_gps_altitude);
+    ALOGI("%s(m_gps_altitude(%ld))", __func__, m_gps_altitude);
     return 0;
 }
 
 int SecCamera::setGPSTimeStamp(const char *gps_timestamp)
 {
-    ALOGV("%s(gps_timestamp(%s))", __func__, gps_timestamp);
+    ALOGI("%s(gps_timestamp(%s))", __func__, gps_timestamp);
     if (gps_timestamp == NULL)
         m_gps_timestamp = 0;
     else
         m_gps_timestamp = atol(gps_timestamp);
 
-    ALOGV("%s(m_gps_timestamp(%ld))", __func__, m_gps_timestamp);
+    ALOGI("%s(m_gps_timestamp(%ld))", __func__, m_gps_timestamp);
     return 0;
 }
 
 int SecCamera::setGPSProcessingMethod(const char *gps_processing_method)
 {
-    ALOGV("%s(gps_processing_method(%s))", __func__, gps_processing_method);
+    ALOGI("%s(gps_processing_method(%s))", __func__, gps_processing_method);
     memset(mExifInfo.gps_processing_method, 0, sizeof(mExifInfo.gps_processing_method));
     if (gps_processing_method != NULL) {
         size_t len = strlen(gps_processing_method);
@@ -2233,7 +2261,7 @@ int SecCamera::setGPSProcessingMethod(const char *gps_processing_method)
 
 int SecCamera::setObjectPosition(int x, int y)
 {
-    ALOGV("%s(setObjectPosition(x=%d, y=%d))", __func__, x, y);
+    ALOGI("%s(setObjectPosition(x=%d, y=%d))", __func__, x, y);
 
     if (m_preview_width ==640)
         x = x - 80;
@@ -2256,7 +2284,7 @@ int SecCamera::setObjectPosition(int x, int y)
 //======================================================================
 int SecCamera::setRecordingSize(int width, int height)
 {
-     ALOGV("%s(width(%d), height(%d))", __func__, width, height);
+     ALOGI("%s(width(%d), height(%d))", __func__, width, height);
 
      m_recording_width  = width;
      m_recording_height = height;
@@ -2268,7 +2296,7 @@ int SecCamera::setRecordingSize(int width, int height)
 
 int SecCamera::setExifOrientationInfo(int orientationInfo)
 {
-     ALOGV("%s(orientationInfo(%d))", __func__, orientationInfo);
+     ALOGI("%s(orientationInfo(%d))", __func__, orientationInfo);
 
      if (orientationInfo < 0) {
          ALOGE("ERR(%s):Invalid orientationInfo (%d)", __func__, orientationInfo);
@@ -2282,7 +2310,7 @@ int SecCamera::setExifOrientationInfo(int orientationInfo)
 /*Video call*/
 int SecCamera::setVTmode(int vtmode)
 {
-    ALOGV("%s(vtmode (%d))", __func__, vtmode);
+    ALOGI("%s(vtmode (%d))", __func__, vtmode);
 
     if (vtmode < VT_MODE_OFF || VT_MODE_MAX <= vtmode) {
         ALOGE("ERR(%s):Invalid vtmode (%d)", __func__, vtmode);
@@ -2299,7 +2327,7 @@ int SecCamera::setVTmode(int vtmode)
 /* Camcorder fix fps */
 int SecCamera::setSensorMode(int sensor_mode)
 {
-    ALOGV("%s(sensor_mode (%d))", __func__, sensor_mode);
+    ALOGI("%s(sensor_mode (%d))", __func__, sensor_mode);
 
     if (sensor_mode < SENSOR_MODE_CAMERA || SENSOR_MODE_MOVIE < sensor_mode) {
         ALOGE("ERR(%s):Invalid sensor mode (%d)", __func__, sensor_mode);
@@ -2322,7 +2350,7 @@ int SecCamera::setSensorMode(int sensor_mode)
 */
 int SecCamera::setShotMode(int shot_mode)
 {
-    ALOGV("%s(shot_mode (%d))", __func__, shot_mode);
+    ALOGI("%s(shot_mode (%d))", __func__, shot_mode);
     if (shot_mode < SHOT_MODE_SINGLE || SHOT_MODE_SELF < shot_mode) {
         ALOGE("ERR(%s):Invalid shot_mode (%d)", __func__, shot_mode);
         return -1;
@@ -2339,7 +2367,7 @@ int SecCamera::getVTmode(void)
 
 int SecCamera::setBlur(int blur_level)
 {
-    ALOGV("%s(level (%d))", __func__, blur_level);
+    ALOGI("%s(level (%d))", __func__, blur_level);
 
     if (blur_level < BLUR_LEVEL_0 || BLUR_LEVEL_MAX <= blur_level) {
         ALOGE("ERR(%s):Invalid level (%d)", __func__, blur_level);
@@ -2365,7 +2393,7 @@ int SecCamera::getBlur(void)
 
 int SecCamera::setDataLineCheck(int chk_dataline)
 {
-    ALOGV("%s(chk_dataline (%d))", __func__, chk_dataline);
+    ALOGI("%s(chk_dataline (%d))", __func__, chk_dataline);
 
     if (chk_dataline < CHK_DATALINE_OFF || CHK_DATALINE_MAX <= chk_dataline) {
         ALOGE("ERR(%s):Invalid chk_dataline (%d)", __func__, chk_dataline);
@@ -2384,7 +2412,7 @@ int SecCamera::getDataLineCheck(void)
 
 int SecCamera::setDataLineCheckStop(void)
 {
-    ALOGV("%s", __func__);
+    ALOGI("%s", __func__);
 
     if (m_flag_camera_start) {
         if (fimc_v4l2_s_ctrl(m_cam_fd, V4L2_CID_CAMERA_CHECK_DATALINE_STOP, 1) < 0) {
@@ -2397,7 +2425,7 @@ int SecCamera::setDataLineCheckStop(void)
 
 const __u8* SecCamera::getCameraSensorName(void)
 {
-    ALOGV("%s", __func__);
+    ALOGI("%s", __func__);
 
     return fimc_v4l2_enuminput(m_cam_fd, getCameraId());
 }
@@ -2405,7 +2433,7 @@ const __u8* SecCamera::getCameraSensorName(void)
 #ifdef ENABLE_ESD_PREVIEW_CHECK
 int SecCamera::getCameraSensorESDStatus(void)
 {
-    ALOGV("%s", __func__);
+    ALOGI("%s", __func__);
 
     // 0 : normal operation, 1 : abnormal operation
     int status = fimc_v4l2_g_ctrl(m_cam_fd, V4L2_CID_ESD_INT);
@@ -2419,7 +2447,7 @@ int SecCamera::getCameraSensorESDStatus(void)
 
 int SecCamera::setJpegThumbnailSize(int width, int height)
 {
-    ALOGV("%s(width(%d), height(%d))", __func__, width, height);
+    ALOGI("%s(width(%d), height(%d))", __func__, width, height);
 
     m_jpeg_thumbnail_width  = width;
     m_jpeg_thumbnail_height = height;
