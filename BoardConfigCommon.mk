@@ -123,10 +123,6 @@ PRODUCT_COPY_FILES += device/samsung/venturi/lvm/sbin/lvm:lvm/sbin/lvm
 PRODUCT_COPY_FILES += device/samsung/venturi/etc/twrp.fstab:twrp.fstab
 PRODUCT_COPY_FILES += device/samsung/venturi/fstab:fstab
 
-#General Diag
-PRODUCT_COPY_FILES += $(PRODUCT_OUT)/utilities/busybox:root/sbin/busybox
-PRODUCT_COPY_FILES += device/samsung/venturi/bbInstaller:root/sbin/bbInstaller
-
 # Boot Animation
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
