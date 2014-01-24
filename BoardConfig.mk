@@ -21,7 +21,7 @@
 include device/samsung/venturi/BoardConfigCommon.mk
 
 # Kernel Config
-TARGET_KERNEL_CONFIG := cyanogenmod_venturi_defconfig
+TARGET_KERNEL_CONFIG := cyanogenmod_venturiusa_defconfig
 
 # Recovery
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/venturi/recovery/recovery_keys.c
