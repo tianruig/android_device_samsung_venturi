@@ -176,7 +176,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Set default USB interface and default to internal SD as /sdcard
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	persist.sys.usb.config=mass_storage \
-	ro.vold.switchablepair=/storage/sdcard0,/storage/sdcard1 \
+	ro.vold.switchablepair=sdcard0,sdcard1 \
 	persist.sys.vold.switchexternal=0 \
 	ro.bq.gpu_to_cpu_unsupported=1
 
