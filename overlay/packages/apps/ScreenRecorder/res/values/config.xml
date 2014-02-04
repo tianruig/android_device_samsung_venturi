@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default screen recorder video dimensions expressed as WxH -->
+    <string name="config_screenRecorderOutputDimensions">480x720</string>
+
+    <!-- Default screen recorder framerate -->
+    <integer name="config_screenRecorderFramerate">3000000</integer>
+
+</resources>
