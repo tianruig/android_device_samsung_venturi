@@ -19,6 +19,9 @@
 # /dev/s3c-mfc                                        u:object_r:mfc_device:s0
 # /dev/s3c-jpg                                        u:object_r:mfc_device:s0
 
+# GPS
+/dev/s3c2410_serial1                                u:object_r:gps_device:s0
+
 # Advanced settings
 /sys/class/misc/pwm_duty/pwm_duty                   u:object_r:sysfs_writable:s0
 /sys/class/mdnieset_ui/switch_mdnieset_ui/mdnieset_ui_file_cmd  u:object_r:sysfs_writable:s0
