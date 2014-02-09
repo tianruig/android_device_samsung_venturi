@@ -10,7 +10,7 @@ In order to build CM-11.0 for this device, sync the entire CyanogenMod repo (ins
 
 ```bash
 mkdir .repo/local_manifests
-curl https://gist.github.com/iurnait/8893791/raw/063ea8a918d9f2dfc19915e894f3e128af0620b1/roomservice.xml > .repo/local_manifests/roomservice.xml
+curl https://raw.github.com/iurnait/android_device_samsung_venturi/cm-11.0/roomservice.xml > .repo/local_manifests/roomservice.xml
 ```
 
 Then, run "repo sync" one more time. After it gets the device, vendor, kernel, and Samsung hardware files you will be able to build.
