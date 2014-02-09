@@ -21,7 +21,14 @@ The after syncing the entire CyanogenMod source tree and the Venturi files, type
 . build/envsetup.sh
 ```
 
-and then the build command is:
+Then, run this command:
+
+```bash
+./device/samsung/venturi/repo-patcher.sh
+```
+
+Then, the build command is:
+
 ```bash
 brunch venturi
 ```
@@ -40,6 +47,12 @@ Then, type:
 
 ```bash
 lunch cm_venturi-userdebug
+```
+
+Then, run this command:
+
+```bash
+./device/samsung/venturi/repo-patcher.sh
 ```
 
 And to direct your build environment to make just a bootimage, type:
