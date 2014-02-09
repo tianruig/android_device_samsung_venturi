@@ -27,8 +27,6 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := scorpion
-ARCH_ARM_HAVE_VFP := true
-ARCH_ARM_HAVE_NEON := true
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
@@ -37,15 +35,11 @@ TARGET_BOARD_PLATFORM := s5pc110
 TARGET_BOARD_PLATFORM_GPU := POWERVR_SGX540_120
 TARGET_BOOTLOADER_BOARD_NAME := s5pc110
 
-# Compiler Optimization
-ARCH_ARM_HIGH_OPTIMIZATION := true
-ARCH_ARM_HIGH_OPTIMIZATION_COMPAT := true
-
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/samsung/venturi
 BOARD_KERNEL_BASE := 0x30008000
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_KERNEL_CMDLINE := console=ttyFIQ0,115200 init=/init no_console_suspend androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=ttyFIQ0,115200 init=/init no_console_suspend
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/samsung/venturi
@@ -170,4 +164,3 @@ BOARD_SEPOLICY_UNION += \
 	pvrsrvinit.te \
 	system.te \
 	wpa_supplicant.te
-
