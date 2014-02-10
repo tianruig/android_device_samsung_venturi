@@ -38,6 +38,12 @@ on boot
     setprop ro.telephony.call_ring.multiple 0
     setprop ro.radio.noril yes
 
+# Make OOM settings stricter
+    chown system system /sys/module/lowmemorykiller/parameters/minfree
+    chmod 0660 /sys/module/lowmemorykiller/parameters/minfree
+    write /sys/module/lowmemorykiller/parameters/minfree 1536,2048,4096,5120,15360,23040
+    chmod 0444 /sys/module/lowmemorykiller/parameters/minfree
+
 on fs
 
 # LVM: Wait for block devices to become available, then set up LVM
