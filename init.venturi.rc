@@ -38,6 +38,9 @@ on boot
     setprop ro.telephony.call_ring.multiple 0
     setprop ro.radio.noril yes
 
+# Kernel init.d script
+    chmod 0777 /system/etc/init.d/89z_kernel
+
 # Make OOM settings stricter
     chown system system /sys/module/lowmemorykiller/parameters/minfree
     chmod 0660 /sys/module/lowmemorykiller/parameters/minfree

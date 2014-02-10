@@ -58,6 +58,10 @@ PRODUCT_COPY_FILES += \
 	device/samsung/venturi/ueventd.venturi.rc:root/ueventd.venturi.rc\
 	device/samsung/venturi/fstab.venturi:root/fstab.venturi
 
+# Misc files
+PRODUCT_COPY_FILES += \
+	device/samsung/venturi/configs/89z_kernel:system/etc/init.d/89z_kernel
+
 # Prebuilt kl keymaps
 PRODUCT_COPY_FILES += \
 	device/samsung/venturi/keys/cytma340_input.idc:system/usr/idc/cytma340_input.idc \
