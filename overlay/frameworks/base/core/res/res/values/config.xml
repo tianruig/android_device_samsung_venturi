@@ -16,125 +16,57 @@
 ** limitations under the License.
 */
 -->
-
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
 
-    <!-- This device is not "voice capable"; it's data-only. -->
-    <!-- <bool name="config_voice_capable">false</bool> -->
+    <!-- List of regexpressions describing the interface (if any) that represent tetherable
+         USB interfaces.  If the device doesn't want to support tething over USB this should
+         be empty.  An example would be "usb.*" -->
+    <string-array translatable="false" name="config_tether_usb_regexs">
+	<item>"rndis0"</item>
+    </string-array>
 
-    <!-- This device does not allow sms service. -->
+    <!-- Indicate whether the SD card is accessible without removing the battery. -->
+    <bool name="config_batterySdCardAccessibility">true</bool>
+
+    <!-- Display low battery warning when battery level dips to this value.
+         Also, the battery stats are flushed to disk when we hit this level.  -->
+    <integer name="config_criticalBatteryWarningLevel">5</integer>
+
+    <!-- Enable lockscreen translucent decor by default -->
+    <bool name="config_enableLockScreenTranslucentDecor">false</bool>
+
+    <!-- Enable translucent decor by default -->
+    <bool name="config_enableTranslucentDecor">false</bool>
+
+    <!-- Flag indicating whether the current device is "voice capable".
+         If true, this means that the device supports circuit-switched
+         (i.e. voice) phone calls over the telephony network, and is
+         allowed to display the in-call UI while a cellular voice call is
+         active.  This can be overridden to false for "data only" devices
+         which can't make voice calls and don't support any in-call UI.
+
+         Note: this flag is subtly different from the
+         PackageManager.FEATURE_TELEPHONY system feature, which is
+         available on *any* device with a telephony radio, even if the
+         device is data-only. -->
+    <bool name="config_voice_capable">false</bool>
+
+    <!-- Flag indicating whether the current device allows sms service.
+         If true, this means that the device supports both sending and
+         receiving sms via the telephony network.
+         This can be overridden to false for "data only" devices
+         which can't send and receive sms message.
+
+         Note: Disable SMS also disable voicemail waiting sms,
+               cell broadcasting sms, and MMS. -->
     <bool name="config_sms_capable">false</bool>
 
-    <string-array translatable="false" name="networkAttributes">
-        <item>"wifi,1,1,1,-1,true"</item>
-        <item>"bluetooth,7,7,0,-1,true"</item>
-        <!-- item>"ethernet,9,9,2,-1,true"</item -->
-    </string-array>
+    <!-- Enables SIP on WIFI only -->
+    <bool name="config_sip_wifi_only">true</bool>
 
-    <!-- This string array should be overridden by the device to present a list of radio
-         attributes.  This is used by the connectivity manager to decide which networks can coexist
-         based on the hardware -->
-    <!-- An Array of "[ConnectivityManager connectionType],
-                      [# simultaneous connection types]"  -->
-    <string-array translatable="false" name="radioAttributes">
-        <item>"1,1"</item>
-        <item>"7,1"</item>
-        <!-- item>"9,1"</item -->
-    </string-array>
+    <!-- Device supports LED flashlight -->
+    <bool name="config_enableTorch">true</bool>
 
-    <!-- Whether a software navigation bar should be shown. NOTE: in the future this may be
-         autodetected from the Configuration. -->
-    <bool name="config_showNavigationBar">false</bool>
-
-    <!-- Flag indicating whether we should enable the automatic brightness in Settings.
-         config_hardware_automatic_brightness_available is not set, so we will use software implementation
-	 Venturi does not have a light sensor, so disable this-->
-    <bool name="config_automatic_brightness_available">false</bool>
-
-    <!-- There is no charging LED. -->
-    <bool name="config_unplugTurnsOnScreen">false</bool>
-
-    <!-- Set to false to enable CRT screen-off animation. -->
-    <bool name="config_animateScreenLights">true</bool>
-
-    <!-- disable menu hard key on Crespo in non-pattern lockscreen -->
-    <bool name="config_disableMenuKeyInLockScreen">true</bool>
-
-    <!-- Array of output values for button backlight corresponding to the LUX values
-         in the config_autoBrightnessLevels array.  This array should have size one greater
-         than the size of the config_autoBrightnessLevels array.
-    -->
-    <integer-array name="config_autoBrightnessButtonBacklightValues">
-        <item>255</item>
-        <item>255</item>
-        <item>255</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-    </integer-array>
-
-    <!-- Array of output values for keyboard backlight corresponding to the LUX values
-         in the config_autoBrightnessLevels array.  This array should have size one greater
-         than the size of the config_autoBrightnessLevels array.
-         Crespo has no keyboard so all values are zero.
-    -->
-    <integer-array name="config_autoBrightnessKeyboardBacklightValues">
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-    </integer-array>
-
-    <integer name="config_deskDockKeepsScreenOn">0</integer>
-    <integer name="config_carDockKeepsScreenOn">1</integer>
-
-    <string-array name="config_locationProviderPackageNames" translatable="false">
-        <item>com.android.location.fused</item>
-        <item>com.google.android.location</item>
-    </string-array>
-
-    <!-- XXXXX NOTE THE FOLLOWING RESOURCES USE THE WRONG NAMING CONVENTION.
-         Please don't copy them, copy anything else. -->
-
-    <!-- An Array of "[ConnectivityManager connectionType],
-         [# simultaneous connection types]"  -->
-
-    <!-- Minimum screen brightness allowed by the power manager. -->
-    <integer name="config_screenBrightnessDim">10</integer>
-
-    <!-- Vibrator pattern for a very short but reliable vibration for soft keyboard tap -->
-    <integer-array name="config_keyboardTapVibePattern">
-        <item>30</item>
-    </integer-array>
-
-    <!-- Vibrator pattern for feedback about booting with safe mode disabled -->
-    <integer-array name="config_safeModeDisabledVibePattern">
-        <item>1</item>
-    </integer-array>
-
-    <!-- crespo doesn't handle this blur effect very quickly. -->
-    <bool name="config_sf_slowBlur">true</bool>
-
-    <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveNotificationLed">false</bool>
-
-    <bool name="config_ui_enableFadingMarquee">false</bool>
-
-    <!-- The attenuation in dB applied to the sound effects played
-         through AudioManager.playSoundEffect() when no volume is specified. -->
-    <integer name="config_soundEffectVolumeDb">-12</integer>
-
-    <!-- Timeout in MS for how long you have to long-press the back key to
-         kill the foreground app. -->
-    <!--<integer name="config_backKillTimeout">1500</integer>-->
-
-    <!--Boolean to enable stk functionality on Samsung phones-->
-    <bool name="config_samsung_stk">true</bool>
-    
-    <!-- Disable lockscreen translucent decor by default -->
-    <bool name="config_enableLockScreenTranslucentDecor">true</bool>
 </resources>

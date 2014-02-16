@@ -1,0 +1,21 @@
+#!/system/bin/sh
+
+# Enable Fastcharge
+# 0 = Disabled
+# 1 = Enabled
+FASTCHARGE=0;
+
+# Ultra Kernel Samepage Merging (UKSM)
+# 0 = Disabled
+# 1 = Enabled
+UKSM=0;
+
+####### DO NOT MODIFY ANYTHING BELOW THIS LINE #######
+
+chmod 664 /sys/kernel/fast_charge/force_fast_charge
+
+echo "$FASTCHARGE" > /sys/kernel/fast_charge/force_fast_charge
+
+chmod 664 /sys/kernel/mm/uksm/run
+
+echo "$UKSM" > /sys/kernel/mm/uksm/run

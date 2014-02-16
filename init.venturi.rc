@@ -38,6 +38,15 @@ on boot
     setprop ro.telephony.call_ring.multiple 0
     setprop ro.radio.noril yes
 
+# Kernel init.d script
+    chmod 0777 /system/etc/init.d/89z_kernel
+
+# Make OOM settings stricter
+    chown system system /sys/module/lowmemorykiller/parameters/minfree
+    chmod 0660 /sys/module/lowmemorykiller/parameters/minfree
+    write /sys/module/lowmemorykiller/parameters/minfree 1536,2048,4096,5120,15360,23040
+    chmod 0444 /sys/module/lowmemorykiller/parameters/minfree
+
 on fs
 
 # LVM: Wait for block devices to become available, then set up LVM
@@ -47,6 +56,7 @@ on fs
     start lvm_vgchange
     
     mount_all fstab.venturi
+    swapon_all fstab.venturi
 
 # SEC_DMCRYPT for MC_CRYPT_ROOT before apply_disk_policy or apply_sec_devenc_init
     #chown system system /efs
@@ -70,6 +80,12 @@ on fs
     chown radio radio /sys/class/sec/uart_switch/UART_SEL/value
     chmod 660 /sys/class/sec/uart_switch/UART_SEL/value
 
+# load kernel modules
+    wait /system/lib/modules
+    insmod /system/lib/modules/bcmdhd.ko
+    insmod /system/lib/modules/vibrator.ko
+    insmod /system/lib/modules/fuse.ko
+
 
 on post-fs
 
@@ -85,11 +101,6 @@ on post-fs
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
 
 on post-fs-data
-
-    # load kernel modules
-    insmod /system/lib/modules/bcmdhd.ko
-    insmod /system/lib/modules/vibrator.ko
-    insmod /system/lib/modules/fuse.ko
 
     # wi-fi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi

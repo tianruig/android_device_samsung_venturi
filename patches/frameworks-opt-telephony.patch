@@ -1,16 +1,16 @@
 diff --git a/src/java/com/android/internal/telephony/MccTable.java b/src/java/com/android/internal/telephony/MccTable.java
-index dd58646..80a1df0 100644
+index 5613709..58adca9 100644
 --- a/src/java/com/android/internal/telephony/MccTable.java
 +++ b/src/java/com/android/internal/telephony/MccTable.java
 @@ -187,11 +187,6 @@ public final class MccTable
+             Slog.d(LOG_TAG, "updateMccMncConfiguration: mcc=" + mcc + ", mnc=" + mnc);
  
-             Rlog.d(LOG_TAG, "updateMccMncConfiguration: mcc=" + mcc + ", mnc=" + mnc);
- 
+             Locale locale = null;
 -            if (mcc != 0) {
 -                setTimezoneFromMccIfNeeded(context, mcc);
--                setLocaleFromMccIfNeeded(context, mcc);
+-                locale = getLocaleFromMcc(context, mcc);
 -                setWifiCountryCodeFromMcc(context, mcc);
 -            }
              try {
-                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
-                 if (mcc != 0) {
+                 Configuration config = new Configuration();
+                 boolean updateConfig = false;

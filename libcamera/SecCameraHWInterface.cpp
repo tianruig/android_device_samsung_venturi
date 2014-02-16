@@ -155,9 +155,9 @@ void CameraHardwareSec::initDefaultParameters(int cameraId)
 
     if (cameraId == SecCamera::CAMERA_ID_BACK) {
         p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
-              "1280x720,800x480,720x480,640x480,592x480,352x288");
+              "800x480,720x480,640x480,592x480,352x288");
         p.set(CameraParameters::KEY_SUPPORTED_PICTURE_SIZES,
-              "2048x1536,2048x1232,1600x1200,1600x960,1024x600,800x600");
+              "800x480,720x480,640x480");
     } else {
         p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
               "640x480,320x240,176x144");
@@ -1068,10 +1068,8 @@ int CameraHardwareSec::pictureThread()
     int postviewHeapSize = mPostViewSize;
     mSecCamera->getSnapshotSize(&cap_width, &cap_height, &cap_frame_size);
     int mJpegHeapSize;
-    if (mSecCamera->getCameraId() == SecCamera::CAMERA_ID_BACK)
-        mJpegHeapSize = cap_frame_size * SecCamera::getJpegRatio();
-    else
-        mJpegHeapSize = cap_frame_size;
+
+    mJpegHeapSize = cap_frame_size;
 
     ALOG_TIME_DEFINE(0)
     ALOG_TIME_START(0)
@@ -1098,41 +1096,24 @@ int CameraHardwareSec::pictureThread()
 
     // Modified the shutter sound timing for Jpeg capture
     if (mSecCamera->getCameraId() == SecCamera::CAMERA_ID_BACK) {
-        mSecCamera->setSnapshotCmd();
+
 
         if (mMsgEnabled & CAMERA_MSG_SHUTTER) {
             mNotifyCb(CAMERA_MSG_SHUTTER, 0, 0, mCallbackCookie);
         }
     }
 
-    if (mSecCamera->getCameraId() == SecCamera::CAMERA_ID_BACK){
-        jpeg_data = mSecCamera->getJpeg(&jpeg_size, &phyAddr);
-        if (jpeg_data == NULL) {
-            ALOGE("ERR(%s):Fail on SecCamera->getSnapshot()", __func__);
-            ret = UNKNOWN_ERROR;
-            goto out;
-        }
-    } else {
-        if (mSecCamera->getSnapshotAndJpeg((unsigned char*)PostviewHeap->base(),
+    if (mSecCamera->getSnapshotAndJpeg((unsigned char*)PostviewHeap->base(),
                 (unsigned char*)JpegHeap->data, &output_size) < 0) {
-            ret = UNKNOWN_ERROR;
-            goto out;
-        }
-        ALOGI("snapshotandjpeg done\n");
+        ret = UNKNOWN_ERROR;
+        goto out;
     }
+    ALOGI("snapshotandjpeg done\n");
 
     ALOG_TIME_END(1)
     ALOG_CAMERA("getSnapshotAndJpeg interval: %lu us", LOG_TIME(1));
 
-    if (mSecCamera->getCameraId() == SecCamera::CAMERA_ID_BACK) {
-        // TODO: copy postview to PostviewHeap->base()
-        decodeInterleaveData(jpeg_data,
-                             SecCamera::getInterleaveDataSize(),
-                             mPostViewWidth, mPostViewHeight,
-                             &JpegImageSize, JpegHeap->data, PostviewHeap->base());
-    } else {
-        JpegImageSize = static_cast<int>(output_size);
-    }
+    JpegImageSize = static_cast<int>(output_size);
     scaleDownYuv422((char *)PostviewHeap->base(), mPostViewWidth, mPostViewHeight,
                     (char *)ThumbnailHeap->base(), mThumbWidth, mThumbHeight);
 
@@ -1468,8 +1449,7 @@ status_t CameraHardwareSec::setParameters(const CameraParameters& params)
     }
 
     if (0 < new_preview_width && 0 < new_preview_height &&
-            new_str_preview_format != NULL &&
-            isSupportedPreviewSize(new_preview_width, new_preview_height)) {
+            new_str_preview_format != NULL) {
         int new_preview_format = V4L2_PIX_FMT_YUV420;
 
         int current_preview_width, current_preview_height, current_frame_size;
@@ -2594,7 +2574,7 @@ extern "C" {
           version_major : 1,
           version_minor : 0,
           id            : CAMERA_HARDWARE_MODULE_ID,
-          name          : "GalaxyTab camera HAL",
+          name          : "Galaxy Player 5 camera HAL",
           author        : "Samsung Corporation",
           methods       : &camera_module_methods,
       },

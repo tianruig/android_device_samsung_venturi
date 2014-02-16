@@ -31,3 +31,6 @@
 
 # USB Disk
 /devices/platform/s3c-usbgadget             auto auto defaults voldmanaged=usbdisk:auto
+
+# zRAM
+/dev/block/zram0        none                swap         defaults                                             zramsize=134217728 

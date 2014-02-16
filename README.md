@@ -1,4 +1,4 @@
-Device files for the Samsung Galaxy Player 5.0 USA
+Device files for the Samsung Galaxy Player 5.0
 
 ## Building ROMs
 
@@ -6,23 +6,14 @@ The files in this folder are the product of the aries-common folder from https:/
 and the vibrantmtd folder from https://github.com/CyanogenMod/android_device_samsung_vibrantmtd merged into one, and modified to run on the
 Samsung Galaxy Player 5.0 aka venturi.
 
-In order to build CM-10.1 for this device, sync the entire CyanogenMod repo (instsructions here: http://wiki.cyanogenmod.org/w/Build_for_vibrantmtd) but do up to where you run "repo sync" and it downloads the source. After the source is all downloaded, create a file under (source-tree-root)/.repo/local_manifests/roomservice.xml and copy the following into that and save:
+In order to build CM-11.0 for this device, sync the entire CyanogenMod repo (instructions here: http://wiki.cyanogenmod.org/w/Build_for_vibrantmtd) but do up to where you run "repo sync" and it downloads the source. After the source is all downloaded, run:
 
 ```bash
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest>
-  <project name="Mevordel/android_device_samsung_venturi" path="device/samsung/venturi" remote="github" />
-  <project name="Mevordel/android_kernel_samsung_venturi" path="kernel/samsung/venturi" remote="github" />
-  <project name="CyanogenMod/android_hardware_samsung" path="hardware/samsung" remote="github" />
-</manifest>
+mkdir .repo/local_manifests
+curl https://raw.github.com/iurnait/android_device_samsung_venturi/cm-11.0/roomservice.xml > .repo/local_manifests/roomservice.xml
 ```
 
 Then, run "repo sync" one more time. After it gets the device, vendor, kernel, and Samsung hardware files you will be able to build.
-
-```bash
-cd device/samsung/venturi
-./extract-files.sh
-```
 
 The after syncing the entire CyanogenMod source tree and the Venturi files, type:
 
@@ -30,7 +21,14 @@ The after syncing the entire CyanogenMod source tree and the Venturi files, type
 . build/envsetup.sh
 ```
 
-and then the build command is:
+Then, run this command:
+
+```bash
+./device/samsung/venturi/repo-patcher.sh
+```
+
+Then, the build command is:
+
 ```bash
 brunch venturi
 ```
@@ -49,6 +47,12 @@ Then, type:
 
 ```bash
 lunch cm_venturi-userdebug
+```
+
+Then, run this command:
+
+```bash
+./device/samsung/venturi/repo-patcher.sh
 ```
 
 And to direct your build environment to make just a bootimage, type:
