@@ -25,3 +25,6 @@
 # Advanced settings
 /sys/class/misc/pwm_duty/pwm_duty                   u:object_r:sysfs_writable:s0
 /sys/class/mdnieset_ui/switch_mdnieset_ui/mdnieset_ui_file_cmd  u:object_r:sysfs_writable:s0
+
+# LVM
+/dev/mapper/lvpool-(.*)                             u:object_r:block_device:s0
