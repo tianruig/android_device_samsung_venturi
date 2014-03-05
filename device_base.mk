@@ -119,6 +119,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	Torch
 
+# DSP Manager
+PRODUCT_PACKAGES += \
+	audio_effects.conf
+
 # Charger
 PRODUCT_PACKAGES += \
 	charger \
