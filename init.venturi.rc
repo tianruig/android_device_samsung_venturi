@@ -124,6 +124,13 @@ on post-fs-data
     chmod 0666 /sys/module/lowmemorykiller/parameters/donotkill_sysproc
     chmod 0666 /sys/module/lowmemorykiller/parameters/donotkill_sysproc_names
 
+    #LMK-NKP: Enable sysproc
+    write /sys/module/lowmemorykiller/parameters/donotkill_sysproc 1
+    
+    #LMK-NKP: Don't kill wpa_supplicant
+    write /sys/module/lowmemorykiller/parameters/donotkill_sysproc_names wpa_supplicant
+    
+
 # 3D init
 service pvrsrvinit /vendor/bin/pvrsrvinit
     class core
