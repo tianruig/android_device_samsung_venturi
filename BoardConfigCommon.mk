@@ -141,10 +141,10 @@ BOARD_EGL_WORKAROUND_BUG_10194508 := true
 BOARD_CUSTOM_VSYNC_IOCTL := true
 
 # Charging mode
-BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/devices/platform/sec-battery/power_supply/battery/charging_mode_booting
-
-# Suspend in charger to disable capacitive keys
-BOARD_CHARGER_ENABLE_SUSPEND := true
+BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/power_supply/battery/charging_mode_booting
+BOARD_CHARGER_ENABLE_SUSPEND := false
+BOARD_CHARGER_DISABLE_INIT_BLANK := false
+BOARD_CHARGER_CUSTOM_BACKLIGHT_PATH := /sys/class/backlight/s5p_bl/brightness
 
 # Include venturi specific stuff
 -include device/samsung/venturi/Android.mk
