@@ -112,6 +112,9 @@ TARGET_RECOVERY_PRE_COMMAND := "echo 1 > /cache/.startrecovery; sync;"
 TARGET_RECOVERY_FSTAB := device/samsung/venturi/fstab.venturi
 RECOVERY_FSTAB_VERSION := 2
 
+# init/libcutils (Reboot)
+TARGET_REBOOT_PRE_COMMAND := "echo 1 > /cache/.rebooting; sync;"
+
 #LVM
 #LVM to ramdisks
 PRODUCT_COPY_FILES += device/samsung/venturi/lvm/etc/lvm.conf:root/lvm/etc/lvm.conf
