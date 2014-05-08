@@ -73,7 +73,6 @@ on fs
 
 # load kernel modules
     wait /system/lib/modules
-    insmod /system/lib/modules/bcmdhd.ko
     insmod /system/lib/modules/vibrator.ko
     insmod /system/lib/modules/fuse.ko
 
