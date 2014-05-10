@@ -4,7 +4,7 @@
   <project name="CyanogenMod/android_hardware_samsung" path="hardware/samsung" remote="github" revision="cm-11.0"/>
   <project path="device/samsung/venturi" name="iurnait/android_device_samsung_venturi" remote="github" revision="cm-11.0"/>
   <project path="vendor/samsung/venturi" name="iurnait/android_vendor_samsung_venturi" remote="github" revision="cm-11.0"/>
-  <project path="kernel/samsung/venturi" name="sultanxda/sultan-kernel-venturi" remote="github" revision="master"/>
+  <project path="kernel/samsung/venturi" name="iurnait/sultan-kernel-venturi" remote="github" revision="master"/>
 
  <!--Linaro toolchain-->
   <project path="prebuilt/linux-x86/toolchain" name="Christopher83/linaro_toolchains_2014" remote="github" revision="2014.01" />
