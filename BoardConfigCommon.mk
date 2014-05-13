@@ -120,7 +120,7 @@ TW_NO_SCREEN_TIMEOUT := true
 TW_NO_SCREEN_BLANK := true
 
 # init/libcutils (Reboot)
-TARGET_REBOOT_PRE_COMMAND := "echo 1 > /cache/.rebooting; sync;"
+TARGET_REBOOT_PRE_COMMAND := "busybox mount /cache; echo 1 > /cache/.rebooting; sync;"
 
 #LVM
 #LVM to ramdisks
