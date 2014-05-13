@@ -112,6 +112,13 @@ TARGET_RECOVERY_PRE_COMMAND := "echo 1 > /cache/.startrecovery; sync;"
 TARGET_RECOVERY_FSTAB := device/samsung/venturi/fstab.venturi
 RECOVERY_FSTAB_VERSION := 2
 
+#TWRP
+PRODUCT_COPY_FILES += device/samsung/venturi/etc/twrp.fstab:recovery/root/etc/twrp.fstab
+DEVICE_RESOLUTION := 480x800
+TW_CUSTOM_POWER_BUTTON := 116
+TW_NO_SCREEN_TIMEOUT := true
+TW_NO_SCREEN_BLANK := true
+
 # init/libcutils (Reboot)
 TARGET_REBOOT_PRE_COMMAND := "echo 1 > /cache/.rebooting; sync;"
 
