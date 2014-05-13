@@ -114,6 +114,9 @@ TW_CUSTOM_POWER_BUTTON := 116
 TW_NO_SCREEN_TIMEOUT := true
 TW_NO_SCREEN_BLANK := true
 
+#PhilZ
+BRIGHTNESS_SYS_FILE := /sys/class/backlight/s5p_bl/brightness
+
 # init/libcutils (Reboot)
 TARGET_REBOOT_PRE_COMMAND := "busybox mount /cache; echo 1 > /cache/.rebooting; sync;"
 
