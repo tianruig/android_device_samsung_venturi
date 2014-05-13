@@ -118,7 +118,7 @@ TWHAVE_SELINUX := true
 BRIGHTNESS_SYS_FILE := /sys/class/backlight/s5p_bl/brightness
 
 # init/libcutils (Reboot)
-TARGET_REBOOT_PRE_COMMAND := "busybox mount /cache; echo 1 > /cache/.rebooting; sync;"
+TARGET_REBOOT_PRE_COMMAND := "busybox mkdir -p /cache; busybox mount -t ext4 /dev/block/mmcblk0p15 /cache; echo 1 > /cache/.rebooting; sync;"
 
 #LVM
 #LVM to ramdisks
