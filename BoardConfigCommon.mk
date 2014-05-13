@@ -115,9 +115,9 @@ RECOVERY_FSTAB_VERSION := 2
 #TWRP
 PRODUCT_COPY_FILES += device/samsung/venturi/etc/twrp.fstab:recovery/root/etc/twrp.fstab
 DEVICE_RESOLUTION := 480x800
-TW_CUSTOM_POWER_BUTTON := 116
-TW_NO_SCREEN_TIMEOUT := true
+TW_BRIGHTNESS_PATH := /sys/class/backlight/s5p_bl/brightness
 TW_NO_SCREEN_BLANK := true
+TWHAVE_SELINUX := true
 
 #PhilZ
 BRIGHTNESS_SYS_FILE := /sys/class/backlight/s5p_bl/brightness
