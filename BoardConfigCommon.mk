@@ -108,7 +108,6 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/venturi/recovery/graphics.c
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/venturi/shbootimg.mk
-TARGET_RECOVERY_PRE_COMMAND := "echo 1 > /cache/.startrecovery; sync;"
 TARGET_RECOVERY_FSTAB := device/samsung/venturi/fstab.venturi
 RECOVERY_FSTAB_VERSION := 2
 
@@ -121,9 +120,6 @@ TWHAVE_SELINUX := true
 
 #PhilZ
 BRIGHTNESS_SYS_FILE := /sys/class/backlight/s5p_bl/brightness
-
-# init/libcutils (Reboot)
-TARGET_REBOOT_PRE_COMMAND := "busybox mkdir -p /cache; busybox mount -t ext4 /dev/block/mmcblk0p15 /cache; echo 1 > /cache/.rebooting; sync;"
 
 #LVM
 #LVM to ramdisks
