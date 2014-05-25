@@ -103,17 +103,18 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/venturi/recovery/graphics.c
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/venturi/shbootimg.mk
-TARGET_RECOVERY_PRE_COMMAND := "echo 1 > /cache/.startrecovery; sync;"
 TARGET_RECOVERY_FSTAB := device/samsung/venturi/fstab.venturi
 RECOVERY_FSTAB_VERSION := 2
 
 #TWRP
 PRODUCT_COPY_FILES += device/samsung/venturi/etc/twrp.fstab:recovery/root/etc/twrp.fstab
-PRODUCT_COPY_FILES += device/samsung/venturi/etc/twrp.fstab:twrp.fstab
 DEVICE_RESOLUTION := 480x800
-TW_CUSTOM_POWER_BUTTON := 116
-TW_NO_SCREEN_TIMEOUT := true
+TW_BRIGHTNESS_PATH := /sys/class/backlight/s5p_bl/brightness
 TW_NO_SCREEN_BLANK := true
+TWHAVE_SELINUX := true
+
+#PhilZ
+BRIGHTNESS_SYS_FILE := /sys/class/backlight/s5p_bl/brightness
 
 #LVM
 #LVM to ramdisks
@@ -148,9 +149,9 @@ BOARD_CUSTOM_VSYNC_IOCTL := true
 
 # Charging mode
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/power_supply/battery/charging_mode_booting
-
-# Suspend in charger to disable capacitive keys
-BOARD_CHARGER_ENABLE_SUSPEND := true
+BOARD_CHARGER_ENABLE_SUSPEND := false
+BOARD_CHARGER_DISABLE_INIT_BLANK := false
+BOARD_CHARGER_CUSTOM_BACKLIGHT_PATH := /sys/class/backlight/s5p_bl/brightness
 
 # Include venturi specific stuff
 -include device/samsung/venturi/Android.mk

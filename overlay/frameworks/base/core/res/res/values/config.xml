@@ -35,10 +35,10 @@
     <integer name="config_criticalBatteryWarningLevel">5</integer>
 
     <!-- Enable lockscreen translucent decor by default -->
-    <bool name="config_enableLockScreenTranslucentDecor">false</bool>
+    <bool name="config_enableLockScreenTranslucentDecor">true</bool>
 
     <!-- Enable translucent decor by default -->
-    <bool name="config_enableTranslucentDecor">false</bool>
+    <bool name="config_enableTranslucentDecor">true</bool>
 
     <!-- Flag indicating whether the current device is "voice capable".
          If true, this means that the device supports circuit-switched
