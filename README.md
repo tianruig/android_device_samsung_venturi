@@ -49,6 +49,7 @@ Now read this: http://source.android.com/source/initializing.html
 
 NOTE: When I say "read", I mean read and comprehend.
 
+NOTE: Read through the topics here as well: http://wiki.cyanogenmod.org/w/Development
 ### Step 2: Downloading the Source.
 
 NOTE: Some say that it is better to download the ROM source and put in your local manifest later. I don't know if that's best but that's what we are going to do.
