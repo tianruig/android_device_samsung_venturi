@@ -61,6 +61,8 @@ cd /home/$USER/BS
 repo init -u git://github.com/scotthartbti/android.git -b kk44
 repo sync
 ```
+WARNING: There may be times, towards the end when it seem like, the download is stuck and not making any progress because there are no updates on the screen. BE PATIENT!, open a program that will show how much bandwidth you are using to be sure!
+
 NOTE: Steps 3 and 4 are from Scott's repo here: https://github.com/scotthartbti/android/tree/kk44.
 
 ### Step 3 Set up local manifest.
@@ -88,3 +90,17 @@ repo sync
 ```
 
 NOTE: Yes we are syncing again and No, it shouldn't take quite as long. Every time you repo sync just new data is downloaded. So we are downloading the 4 repo's we just put in and any updates that may have occured to the repo's we already have.
+
+### Step 3 Building
+
+NOTE: Now you have everything that you need to build Beastalk for your Galaxy Player 5. Build times depend on you PC performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
+
+NOTE: It may take anywhere from 5 hours to 15 hours depending on system specs for a complete build.
+Execute the following commands in a linux terminal:
+```bash
+cd /home/$USER/BS
+. build/envsetup.sh
+lunch cm_venturi-userdebug
+make -j8 otapackage
+```
+WARNING: There may be times, towards the end when it seem like, the build is stuck because of a lack of updates on the screen. BE PATIENT! libwebviewchromium.so is a beast and is usually the last file to be build. It takes awhile to complete. I ususally have 15 to 20 minutes of "no screen activity" before it finally finishes building that lib and then continues...
