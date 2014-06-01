@@ -2,13 +2,16 @@
 
 ### Kernel
 This device tree is intended to be used with the Nutella Kernel
+
 See: https://github.com/Meticulus/nutella_kernel_samsung_venturi
 ### Vendor
 This device tree is intented to be used with this vendor repo
-https://github.com/Meticulus/android_vendor_samsung_venturi
+
+See: https://github.com/Meticulus/android_vendor_samsung_venturi
 ### Hardware
 This device tree is intented to be used with this hardware repo
-https://github.com/Meticulus/android_hardware_samsung
+
+See: https://github.com/Meticulus/android_hardware_samsung
 
 ### Camera
 The camera HAL is modified from the CyanogenMod P1 cameral HAL. There is no opensource implementation of our camera HAL.
@@ -49,13 +52,39 @@ NOTE: When I say "read", I mean read and comprehend.
 
 NOTE: Some say that it is better to download the ROM source and put in your local manifest later. I don't know if that's best but that's what we are going to do.
 
-Execute the following command in a linux terminal:
+BEFORE YOU BEGIN: You are about to start downloading 5 - 15 Gigs of data. That could take a very long time, so plan accordingly. I like to start juts before I go to sleep and let it go overnight! If you have to work, perhaps start it before work and let it go through out the day.
 
-1. mkdir /home/$USER/BS
-2. cd /home/$USER/BS
-3. repo init -u git://github.com/scotthartbti/android.git -b kk44
-4. repo sync
+Execute the following commands in a linux terminal:
+```bash
+mkdir /home/$USER/BS
+cd /home/$USER/BS
+repo init -u git://github.com/scotthartbti/android.git -b kk44
+repo sync
+```
+NOTE: Steps 3 and 4 are from Scott's repo here: https://github.com/scotthartbti/android/tree/kk44.
 
-NOTE: Steps 3 and 4 are from Scott's repo here: https://github.com/scotthartbti/android/tree/kk44
+### Step 3 Set up local manifest.
 
+The local manifest is different for every device. It contains those repos that are device specific, where as the ROM code you just "repo sync'd" is code that is general to any device.
 
+Execute the following commands in a linux terminal:
+```bash
+gedit /home/$USER/BS/.repo/local_manifests/venturi.xml
+```
+Now copy the following into venturi.xml, save and close.
+```bash
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <project name="Meticulus/beanstalk_device_samsung_venturi" path="device/samsung/venturi" remote="github" revision="kk44"/>
+  <project name="Meticulus/nutella_samsung_venturi" path="kernel/samsung/venturi" remote="github" revision="master"/>
+  <project name="Meticulus/android_hardware_samsung" path="hardware/samsung" remote="github" revision="cm-11.0"/>
+  <project name="Meticulus/android_vendor_samsung_venturi" path="vendor/samsung/venturi" remote="github" revision="cm-11.0"/>
+</manifest>
+```
+Execute the following commands in a linux terminal:
+```bash
+cd /home/$USER/BS
+repo sync
+```
+
+NOTE: Yes we are syncing again and No, it shouldn't take quite as long. Every time you repo sync just new data is downloaded. So we are downloading the 4 repo's we just put in and any updates that may have occured to the repo's we already have.
