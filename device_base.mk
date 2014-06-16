@@ -97,6 +97,7 @@ PRODUCT_PACKAGES += \
 	audio.primary.s5pc110 \
 	audio.a2dp.default \
 	audio.usb.default \
+	lights.s5pc110 \
 	camera.s5pc110 \
 	hwcomposer.s5pc110 \
 	power.s5pc110 \
