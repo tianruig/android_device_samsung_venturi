@@ -1,0 +1,29 @@
+From 1dfd01700960b0892ee2e3b5f0658090d9172c01 Mon Sep 17 00:00:00 2001
+From: zaclimon <isaacpateau05@gmail.com>
+Date: Thu, 21 Nov 2013 16:03:02 -0500
+Subject: [PATCH] Re-add BOARD_USE_LEGACY_TOUCHSCREEN flag for the devices that
+ needs it
+
+Change-Id: I24ed882348ec5463910b5e49f849af2deac240a3
+---
+ services/input/Android.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/services/input/Android.mk b/services/input/Android.mk
+index 547018c..2cfb31d 100644
+--- a/services/input/Android.mk
++++ b/services/input/Android.mk
+@@ -44,6 +44,10 @@ LOCAL_C_INCLUDES := \
+ 
+ LOCAL_MODULE:= libinputservice
+ 
++ifeq ($(BOARD_USE_LEGACY_TOUCHSCREEN),true)
++LOCAL_CFLAGS += -DLEGACY_TOUCHSCREEN
++endif
++
+ ifeq ($(BOARD_USE_LEGACY_TRACKPAD),true)
+ LOCAL_CFLAGS += -DLEGACY_TRACKPAD
+ endif
+-- 
+1.9.3
+

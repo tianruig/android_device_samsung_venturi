@@ -1,0 +1,86 @@
+From ac44e85313dc7d00dce82057aaea26337b86df2c Mon Sep 17 00:00:00 2001
+From: Matt Mower <mowerm@gmail.com>
+Date: Sat, 28 Dec 2013 14:14:54 -0600
+Subject: [PATCH] vold: allow swapped storage paths at vold init
+
+Advanced storage settings patch series:
+[1/4] vold: allow swapped storage paths at vold init
+      http://review.cyanogenmod.org/56515
+[2/4] Advanced storage: vold swap storage paths
+      http://review.cyanogenmod.org/56516
+[3/4] storage: allow swapping primary storage for apps
+      http://review.cyanogenmod.org/56950
+[4/4] Advanced storage: swap primary storage for apps
+      http://review.cyanogenmod.org/56951
+
+By setting persistent system properties
+ persist.sys.vold.switchexternal=1
+ persist.sys.vold.switchablepair=sdcard0,sdcard1 (for example)
+two non-emulated extended storage devices can swap between primary
+and secondary storage.
+
+This commit is heavily inspired by Rick Fernie and Ricardo Cerqueira's
+"vold: Allow pre-configured device pairs to switch mountpoints"
+[http://review.cyanogenmod.org/12764] but adapted to CM's newer vold.
+
+Change-Id: I2be5d4799c2d8f04a535096ac4c7619849f1f84a
+---
+ DirectVolume.cpp | 38 +++++++++++++++++++++++++++++++-------
+ 1 file changed, 31 insertions(+), 7 deletions(-)
+
+diff --git a/DirectVolume.cpp b/DirectVolume.cpp
+index 57dc555..3781aa0 100644
+--- a/DirectVolume.cpp
++++ b/DirectVolume.cpp
+@@ -51,17 +51,41 @@ DirectVolume::DirectVolume(VolumeManager *vm, const fstab_rec* rec, int flags) :
+               rec->mount_point);
+     }
+ 
+-    char mount[PATH_MAX];
++    char mount_media[PATH_MAX];
++    char mount_fuse[PATH_MAX];
++    char switchable[PROPERTY_VALUE_MAX];
+ 
+ #ifdef MINIVOLD
+     // In recovery, directly mount to /storage/* since we have no fuse daemon
+-    snprintf(mount, PATH_MAX, "%s/%s", Volume::FUSE_DIR, rec->label);
+-    mMountpoint = mFuseMountpoint = strdup(mount);
++    snprintf(mount_fuse, PATH_MAX, "%s/%s", Volume::FUSE_DIR, rec->label);
++    mMountpoint = mFuseMountpoint = strdup(mount_fuse);
+ #else
+-    snprintf(mount, PATH_MAX, "%s/%s", Volume::MEDIA_DIR, rec->label);
+-    mMountpoint = strdup(mount);
+-    snprintf(mount, PATH_MAX, "%s/%s", Volume::FUSE_DIR, rec->label);
+-    mFuseMountpoint = strdup(mount);
++    snprintf(mount_media, PATH_MAX, "%s/%s", Volume::MEDIA_DIR, rec->label);
++    snprintf(mount_fuse, PATH_MAX, "%s/%s", Volume::FUSE_DIR, rec->label);
++
++    property_get("persist.sys.vold.switchexternal", switchable, "0");
++    if (!strcmp(switchable,"1")) {
++        char *first, *second = NULL;
++        const char *delim = ",";
++
++        property_get("persist.sys.vold.switchablepair", switchable, "");
++        if (!(first = strtok(switchable, delim))) {
++            SLOGE("Mount switch requested, but no switchable mountpoints found");
++        } else if (!(second = strtok(NULL, delim))) {
++            SLOGE("Mount switch requested, but bad switchable mountpoints found");
++        } else {
++            if (!strcmp(rec->label,first)) {
++                snprintf(mount_media, PATH_MAX, "%s/%s", Volume::MEDIA_DIR, second);
++                snprintf(mount_fuse, PATH_MAX, "%s/%s", Volume::FUSE_DIR, second);
++            } else if (!strcmp(rec->label,second)) {
++                snprintf(mount_media, PATH_MAX, "%s/%s", Volume::MEDIA_DIR, first);
++                snprintf(mount_fuse, PATH_MAX, "%s/%s", Volume::FUSE_DIR, first);
++            }
++        }
++    }
++
++    mMountpoint = strdup(mount_media);
++    mFuseMountpoint = strdup(mount_fuse);
+ #endif
+ 
+     setState(Volume::State_NoMedia);
+-- 
+1.9.3
+
