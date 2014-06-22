@@ -1,0 +1,272 @@
+From 5423c4226aee53d47c6b0637aea89d18afa023b7 Mon Sep 17 00:00:00 2001
+From: kszaq <kszaquitto@gmail.com>
+Date: Wed, 18 Dec 2013 23:16:27 +0100
+Subject: [PATCH] libc: Unbreak build for scorpion
+
+Use cortex-a15 memcpy and krait memset routines
+
+Change-Id: I02cb178b33b01fc91e903f1f7b620640fd0f3310
+---
+ libc/arch-arm/scorpion/bionic/memcpy.S | 141 ---------------------------------
+ libc/arch-arm/scorpion/bionic/memset.S |  81 -------------------
+ libc/arch-arm/scorpion/scorpion.mk     |   9 ++-
+ 3 files changed, 7 insertions(+), 224 deletions(-)
+ delete mode 100644 libc/arch-arm/scorpion/bionic/memcpy.S
+ delete mode 100644 libc/arch-arm/scorpion/bionic/memset.S
+
+diff --git a/libc/arch-arm/scorpion/bionic/memcpy.S b/libc/arch-arm/scorpion/bionic/memcpy.S
+deleted file mode 100644
+index 08b2ce9..0000000
+--- a/libc/arch-arm/scorpion/bionic/memcpy.S
++++ /dev/null
+@@ -1,141 +0,0 @@
+-/*
+- * Copyright (C) 2008 The Android Open Source Project
+- * All rights reserved.
+- *
+- * Copyright (c) 2009-2011, Code Aurora Forum. All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- *  * Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- *  * Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in
+- *    the documentation and/or other materials provided with the
+- *    distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+- * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+- * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+- * SUCH DAMAGE.
+- */
+-
+-#include <machine/cpu-features.h>
+-#include <machine/asm.h>
+-
+-#if defined(__ARM_NEON__) && !defined(ARCH_ARM_USE_NON_NEON_MEMCPY)
+-	/*
+-	 * These can be overridden in:
+-	 *   device/<vendor>/<board>/BoardConfig.mk
+-         * by setting the following:
+-	 *   TARGET_USE_SCORPION_BIONIC_OPTIMIZATION := true
+-	 *   TARGET_USE_SCORPION_PLD_SET := true
+-	 *   TARGET_SCORPION_BIONIC_PLDOFFS := <pldoffset>
+-	 *   TARGET_SCORPION_BIONIC_PLDSIZE := <pldsize>
+-	 */
+-#ifndef PLDOFFS
+-#define PLDOFFS	(6)
+-#endif
+-#ifndef PLDSIZE
+-#define PLDSIZE	(128)	/* L2 cache line size */
+-#endif
+-        .code 32
+-        .align 5
+-        .globl memcpy
+-        .func
+-memcpy:
+-	push            {r0}
+-	cmp             r2, #4
+-	blt             .Lneon_lt4
+-	cmp             r2, #16
+-	blt             .Lneon_lt16
+-	cmp             r2, #32
+-	blt             .Lneon_16
+-	cmp              r2, #128
+-	blt              .Lneon_copy_32_a
+-	/* Copy blocks of 128-bytes (word-aligned) at a time*/
+-	/* Code below is optimized for PLDSIZE=128 only */
+-	mov             r12, r2, lsr #7
+-	cmp             r12, #PLDOFFS
+-	ble             .Lneon_copy_128_loop_nopld
+-	sub             r12, #PLDOFFS
+-	pld             [r1, #(PLDOFFS-1)*PLDSIZE]
+-.Lneon_copy_128_loop_outer:
+-	pld             [r1, #(PLDOFFS*PLDSIZE)]
+-	vld1.32         {q0, q1}, [r1]!
+-	vld1.32         {q2, q3}, [r1]!
+-	vld1.32         {q8, q9}, [r1]!
+-	vld1.32         {q10, q11}, [r1]!
+-	subs            r12, r12, #1
+-	vst1.32	        {q0, q1}, [r0]!
+-	vst1.32         {q2, q3}, [r0]!
+-	vst1.32         {q8, q9}, [r0]!
+-	vst1.32         {q10, q11}, [r0]!
+-	bne             .Lneon_copy_128_loop_outer
+-	mov             r12, #PLDOFFS
+-.Lneon_copy_128_loop_nopld:
+-	vld1.32         {q0, q1}, [r1]!
+-	vld1.32         {q2, q3}, [r1]!
+-	vld1.32         {q8, q9}, [r1]!
+-	vld1.32         {q10, q11}, [r1]!
+-	subs            r12, r12, #1
+-	vst1.32         {q0, q1}, [r0]!
+-	vst1.32         {q2, q3}, [r0]!
+-	vst1.32         {q8, q9}, [r0]!
+-	vst1.32         {q10, q11}, [r0]!
+-	bne             .Lneon_copy_128_loop_nopld
+-	ands            r2, r2, #0x7f
+-	beq             .Lneon_exit
+-	cmp             r2, #32
+-	blt             .Lneon_16
+-	nop
+-	/* Copy blocks of 32-bytes (word aligned) at a time*/
+-.Lneon_copy_32_a:
+-	mov             r12, r2, lsr #5
+-.Lneon_copy_32_loop_a:
+-	vld1.32         {q0,q1}, [r1]!
+-	subs            r12, r12, #1
+-	vst1.32         {q0,q1}, [r0]!
+-	bne             .Lneon_copy_32_loop_a
+-	ands            r2, r2, #0x1f
+-	beq             .Lneon_exit
+-.Lneon_16:
+-	subs            r2, r2, #16
+-	blt             .Lneon_lt16
+-	vld1.32         {q8}, [r1]!
+-	vst1.32         {q8}, [r0]!
+-	beq             .Lneon_exit
+-.Lneon_lt16:
+-	movs            r12, r2, lsl #29
+-	bcc             .Lneon_skip8
+-	ldr             r3, [r1], #4
+-	ldr             r12, [r1], #4
+-	str             r3, [r0], #4
+-	str             r12, [r0], #4
+-.Lneon_skip8:
+-	bpl             .Lneon_lt4
+-	ldr             r3, [r1], #4
+-	str             r3, [r0], #4
+-.Lneon_lt4:
+-	movs            r2, r2, lsl #31
+-	bcc             .Lneon_lt2
+-	ldrh            r3, [r1], #2
+-	strh            r3, [r0], #2
+-.Lneon_lt2:
+-	bpl             .Lneon_exit
+-	ldrb            r12, [r1]
+-	strb            r12, [r0]
+-.Lneon_exit:
+-	pop             {r0}
+-	bx              lr
+-	.endfunc
+-	.end
+-#endif
+diff --git a/libc/arch-arm/scorpion/bionic/memset.S b/libc/arch-arm/scorpion/bionic/memset.S
+deleted file mode 100644
+index a2e2d80..0000000
+--- a/libc/arch-arm/scorpion/bionic/memset.S
++++ /dev/null
+@@ -1,81 +0,0 @@
+-/*
+- * Copyright (C) 2008 The Android Open Source Project
+- * All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- *  * Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- *  * Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in
+- *    the documentation and/or other materials provided with the
+- *    distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+- * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+- * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+- * SUCH DAMAGE.
+- */
+-
+-#include <machine/cpu-features.h>
+-#include <machine/asm.h>
+-
+-/*
+- * This code assumes it is running on a processor that supports all arm v7
+- * instructions, that supports neon instructions, and that supports
+- * unaligned neon instruction accesses to memory.
+- */
+-
+-    .fpu    neon
+-
+-ENTRY(bzero)
+-        mov     r2, r1
+-        mov     r1, #0
+-END(bzero)
+-
+-/* memset() returns its first argument.  */
+-ENTRY(memset)
+-        .save       {r0}
+-        stmfd       sp!, {r0}
+-
+-        vdup.8      q0, r1
+-
+-        /* make sure we have at least 32 bytes to write */
+-        subs        r2, r2, #32
+-        blo         2f
+-        vmov        q1, q0
+-
+-1:      /* The main loop writes 32 bytes at a time */
+-        subs        r2, r2, #32
+-        vst1.8      {d0 - d3}, [r0]!
+-        bhs         1b
+-
+-2:      /* less than 32 left */
+-        add         r2, r2, #32
+-        tst         r2, #0x10
+-        beq         3f
+-
+-        // writes 16 bytes, 128-bits aligned
+-        vst1.8      {d0, d1}, [r0]!
+-3:      /* write up to 15-bytes (count in r2) */
+-        movs        ip, r2, lsl #29
+-        bcc         1f
+-        vst1.8      {d0}, [r0]!
+-1:      bge         2f
+-        vst1.32     {d0[0]}, [r0]!
+-2:      movs        ip, r2, lsl #31
+-        strmib      r1, [r0], #1
+-        strcsb      r1, [r0], #1
+-        strcsb      r1, [r0], #1
+-        ldmfd       sp!, {r0}
+-        bx          lr
+-END(memset)
+diff --git a/libc/arch-arm/scorpion/scorpion.mk b/libc/arch-arm/scorpion/scorpion.mk
+index a85f4d3..52bf78b 100644
+--- a/libc/arch-arm/scorpion/scorpion.mk
++++ b/libc/arch-arm/scorpion/scorpion.mk
+@@ -1,7 +1,12 @@
+-$(call libc-add-cpu-variant-src,MEMCPY,arch-arm/scorpion/bionic/memcpy.S)
+-$(call libc-add-cpu-variant-src,MEMSET,arch-arm/scorpion/bionic/memset.S)
++$(call libc-add-cpu-variant-src,MEMCPY,arch-arm/cortex-a15/bionic/memcpy.S)
++$(call libc-add-cpu-variant-src,MEMSET,arch-arm/krait/bionic/memset.S)
+ $(call libc-add-cpu-variant-src,STRCMP,arch-arm/krait/bionic/strcmp.S)
+ $(call libc-add-cpu-variant-src,MEMMOVE,arch-arm/krait/bionic/memmove.S)
++# Use cortex-a15 versions of strcat/strcpy/strlen.
++$(call libc-add-cpu-variant-src,STRCAT,arch-arm/cortex-a15/bionic/strcat.S)
++$(call libc-add-cpu-variant-src,STRCPY,arch-arm/cortex-a15/bionic/strcpy.S)
+ $(call libc-add-cpu-variant-src,STRLEN,arch-arm/cortex-a15/bionic/strlen.S)
++$(call libc-add-cpu-variant-src,__STRCAT_CHK,arch-arm/cortex-a15/bionic/__strcat_chk.S)
++$(call libc-add-cpu-variant-src,__STRCPY_CHK,arch-arm/cortex-a15/bionic/__strcpy_chk.S)
+ 
+ #include bionic/libc/arch-arm/generic/generic.mk
+-- 
+1.9.3
+
