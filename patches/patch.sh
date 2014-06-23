@@ -4,10 +4,11 @@ TOPDIR="$THISDIR/../../../../"
 echo $TOPDIR
 find -name *.patch | while read LINE;
 do
+	echo "------------------------------------------------------------------------"
 	echo "patch = $THISDIR/$LINE"
+	echo "------------------------------------------------------------------------"
 	PATCH=$THISDIR/$LINE
-	REPO=$(echo $LINE | cut -d "/" -f2)
-        REPO="$(echo $REPO | cut -d "_" -f1)/$(echo $REPO | cut -d "_" -f2)"
+	REPO=$(dirname ${LINE//_//})
 	echo "repo = $REPO"
 	cd $TOPDIR
 	cd $REPO
@@ -25,5 +26,7 @@ do
 		echo "Fix the patch!"
 		break;
 	fi
+	echo ""
+        echo ""
 	cd $THISDIR
 done
