@@ -6,8 +6,7 @@ find -name *.patch | while read LINE;
 do
 	echo "patch = $THISDIR/$LINE"
 	PATCH=$THISDIR/$LINE
-	REPO=$(echo $LINE | cut -d "/" -f2)
-        REPO="$(echo $REPO | cut -d "_" -f1)/$(echo $REPO | cut -d "_" -f2)"
+  	REPO=$(dirname ${LINE//_//})
 	echo "repo = $REPO"
 	cd $TOPDIR
 	cd $REPO
