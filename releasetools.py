@@ -91,8 +91,14 @@ def FullOTA_Assertions(info):
   info.script.AppendExtra('symlink("/tmp/twrp.fstab", "/etc/recovery.fstab");')
   info.script.AppendExtra('symlink("/tmp/fstab", "/etc/fstab");')
 
+# Force clean install! Bypass all that persistence crap!
+  info.script.AppendExtra('ui_print("Enforcing clean install...");')
+  info.script.AppendExtra('assert(run_program("/sbin/busybox", "umount","/system") == 0);')
+  info.script.AppendExtra('assert(run_program("/tmp/make_ext4fs", "-b", "4096", "-g", "32768", "-i", "8192", "-I", "256", "-a","/system", "/dev/lvpool/system") == 0);')
+
 def FullOTA_InstallEnd(info):
   info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
 
-
+# GApps must be reinstalled every flash now!
+  info.script.AppendExtra('ui_print("Remember to install/re-install GApps on every ROM flash! -Meticulus");')
 
