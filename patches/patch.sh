@@ -13,7 +13,7 @@ do
 	cd $TOPDIR
 	cd $REPO
 	RESULT=$(patch -p1 < $PATCH)
-	echo $RESULT
+	echo -e "${RESULT}"
 	if [[ $(echo $RESULT | grep -c FAILED) -gt 0 ]] ; then
 		echo ""
 		echo "Fail!"
