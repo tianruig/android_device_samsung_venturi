@@ -114,6 +114,7 @@ TWHAVE_SELINUX := true
 
 #PhilZ
 BRIGHTNESS_SYS_FILE := /sys/class/backlight/s5p_bl/brightness
+BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../../device/samsung/venturi/recovery/recovery_keys.c
 
 #LVM
 #LVM to ramdisks

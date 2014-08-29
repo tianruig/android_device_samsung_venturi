@@ -13,13 +13,16 @@ int device_handle_key(int key_code, int visible) {
         switch (key_code) {
             case KEY_VOLUMEDOWN:
             case 139: // MENU
+	    case 108:
                 return HIGHLIGHT_DOWN;
 
             case KEY_VOLUMEUP:
+	    case 103:
                 return HIGHLIGHT_UP;
 
             case KEY_POWER:
             case 102: // HOME
+	    case 28:
                 return SELECT_ITEM;
                 
             case 158: // BACK
