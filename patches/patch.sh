@@ -4,6 +4,7 @@ TOPDIR="$THISDIR/../../../../"
 echo $TOPDIR
 find -name *.patch | while read LINE;
 do
+	clear
 	echo "------------------------------------------------------------------------"
 	echo "patch = $THISDIR/$LINE"
 	echo "------------------------------------------------------------------------"
@@ -24,6 +25,32 @@ do
 		echo ""
 		echo "Fail!"
 		echo "Fix the patch!"
+		read throwaway
+		break;
+	fi
+	echo ""
+        echo ""
+	cd $THISDIR
+done
+
+find -name *.apply | while read LINE;
+do
+	clear
+	echo "------------------------------------------------------------------------"
+	echo "patch = $THISDIR/$LINE"
+	echo "------------------------------------------------------------------------"
+	PATCH=$THISDIR/$LINE
+	REPO=$(dirname ${LINE//_//})
+	echo "repo = $REPO"
+	cd $TOPDIR
+	cd $REPO
+	RESULT=$(git apply --whitespace=nowarn -v $PATCH 2>&1)
+	echo -e "${RESULT}"
+	if [[ $(echo $RESULT | grep -c error:) -gt 0 ]] ; then
+		echo ""
+		echo "Fail!"
+		echo "Fix the patch!"
+		read throwaway
 		break;
 	fi
 	echo ""
