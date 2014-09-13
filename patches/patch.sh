@@ -1,8 +1,8 @@
-#! /bin/bash
+#!/bin/bash
 THISDIR=$PWD
 TOPDIR="$THISDIR/../../../../"
 echo $TOPDIR
-find -name *.patch | while read LINE;
+for LINE in $(find -name *.patch)
 do
 	clear
 	echo "------------------------------------------------------------------------"
@@ -18,14 +18,21 @@ do
 	if [[ $(echo $RESULT | grep -c FAILED) -gt 0 ]] ; then
 		echo ""
 		echo "Fail!"
-		echo "Fix the patch!"
+		read -p "Patch Failed!" yn
 		break;
 	fi
 	if [[ $(echo $RESULT | grep -c "saving rejects to file") -gt 0 ]] ; then
 		echo ""
 		echo "Fail!"
 		echo "Fix the patch!"
-		read throwaway
+		read -p "Patch Rejected!" yn
+		break;
+	fi
+	if [[ $(echo $RESULT | grep -c "Skip this patch") -gt 0 ]] ; then
+		echo ""
+		echo "Fail!"
+		echo "Fix the patch!"
+		read -p "Patch Skipped!" yn
 		break;
 	fi
 	echo ""
@@ -33,9 +40,8 @@ do
 	cd $THISDIR
 done
 
-find -name *.apply | while read LINE;
+for LINE in $(find -name *.apply)
 do
-	clear
 	echo "------------------------------------------------------------------------"
 	echo "patch = $THISDIR/$LINE"
 	echo "------------------------------------------------------------------------"
@@ -50,7 +56,7 @@ do
 		echo ""
 		echo "Fail!"
 		echo "Fix the patch!"
-		read throwaway
+		read -p "Patch Error!" yn
 		break;
 	fi
 	echo ""
