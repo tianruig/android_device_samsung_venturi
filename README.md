@@ -93,6 +93,13 @@ NOTE: Yes we are syncing again and No, it shouldn't take quite as long. Every ti
 
 ### Step 4: Building
 
+Now you will want to apply the repo patches. These patches modify code in the ROM to work with this device.
+Execute the following commands in a linux terminal:
+```bash
+cd /home/$USER/carbon/device/samsung/venturi
+./patch.sh
+```
+
 NOTE: Now you have everything that you need to build Carbon ROM for your Galaxy Player 5. Build times depend on you PC performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
 
 NOTE: It may take anywhere from 5 hours to 15 hours depending on system specs for a complete build.
