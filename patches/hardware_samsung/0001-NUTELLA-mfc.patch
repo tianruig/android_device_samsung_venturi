@@ -1,16 +1,16 @@
-From 05edbd21a826f1c30fa117f09c779f886f473cf4 Mon Sep 17 00:00:00 2001
+From efffad646b64adfafd221577bd13a62e07dd602a Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Sat, 18 Oct 2014 12:26:31 -0500
+Date: Sat, 18 Oct 2014 14:57:22 -0500
 Subject: [PATCH] NUTELLA mfc
 
-Change-Id: I18beaaaa7efa6a9652064cefcbac01abf39cece0
+Change-Id: I8106ae8caa572a93cb019fd6074f4c9baf21f54f
 ---
- .../video/mfc_c110/dec/src/SsbSipMfcDecAPI.c       |   40 ++++++++++++++++++--
- .../video/mfc_c110/enc/src/SsbSipMfcEncAPI.c       |   35 ++++++++++++++---
- 2 files changed, 67 insertions(+), 8 deletions(-)
+ .../video/mfc_c110/dec/src/SsbSipMfcDecAPI.c       |   52 ++++++++++++++++++--
+ .../video/mfc_c110/enc/src/SsbSipMfcEncAPI.c       |   47 ++++++++++++++++--
+ 2 files changed, 91 insertions(+), 8 deletions(-)
 
 diff --git a/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/dec/src/SsbSipMfcDecAPI.c b/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/dec/src/SsbSipMfcDecAPI.c
-index 6c64ef8..cf7d780 100644
+index 6c64ef8..3159012 100644
 --- a/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/dec/src/SsbSipMfcDecAPI.c
 +++ b/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/dec/src/SsbSipMfcDecAPI.c
 @@ -15,6 +15,7 @@
@@ -21,27 +21,39 @@ index 6c64ef8..cf7d780 100644
  #include <unistd.h>
  #include <string.h>
  #include <fcntl.h>
-@@ -34,6 +35,8 @@
+@@ -34,6 +35,10 @@
  #define VOP_START_CODE          (0x000001B6)
  #define MP4_START_CODE          (0x000001)
  
 +static int logonce = 0;
++static int searched = 0;
++static int isnutella_max = 0;
 +
  static void getAByte(char *buff, int *code)
  {
      int byte;
-@@ -44,6 +47,37 @@ static void getAByte(char *buff, int *code)
+@@ -44,6 +49,47 @@ static void getAByte(char *buff, int *code)
      *code |= byte;
  }
  
 +static int isNUTELLA_MAXMEM()
 +{
++    if(searched) return isnutella_max;
++    searched = 1;
 +    char kernel_version[255];
 +    FILE *proc_version = fopen ("/proc/version", "rt");
 +    fgets(kernel_version, 255, proc_version);
 +    fclose(proc_version);
-+    //ALOGI("%s\n",kernel_version);
-+    return (strcmp("NUTELLA-MAXMEM",kernel_version) < strlen(kernel_version));
++    int pos = 0;
++    while (pos < strlen(kernel_version) - 14)
++    {
++	if(strncmp("NUTELLA-MAXMEM",kernel_version + pos, 14) == 0)
++	{
++	    isnutella_max = 1;
++	}
++	pos = pos + 1;	 
++    }
++    return isnutella_max;
 +}
 +
 +static int get_MMAP_BUFFER_SIZE_MMAP()
@@ -68,7 +80,7 @@ index 6c64ef8..cf7d780 100644
  static mfc_packed_mode isPBPacked(_MFCLIB *pCtx, int length)
  {
      char *strmBuffer = NULL;
-@@ -116,7 +150,7 @@ void *SsbSipMfcDecOpen(void *value)
+@@ -116,7 +162,7 @@ void *SsbSipMfcDecOpen(void *value)
          ALOGE("SsbSipMfcDecOpenExt: value is invalid, value: %d\n", *(int *)value);
      }
  
@@ -77,7 +89,7 @@ index 6c64ef8..cf7d780 100644
      if (!mapped_addr) {
          ALOGE("SsbSipMfcDecOpen: FIMV5.0 driver address mapping failed\n");
          return NULL;
-@@ -222,7 +256,7 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcDecExe(void *openHandle, int lengthBufFill)
+@@ -222,7 +268,7 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcDecExe(void *openHandle, int lengthBufFill)
          return MFC_RET_INVALID_PARAM;
      }
  
@@ -86,7 +98,7 @@ index 6c64ef8..cf7d780 100644
          ALOGE("SsbSipMfcDecExe: lengthBufFill is invalid. (lengthBufFill=%d)\n", lengthBufFill);
          return MFC_RET_INVALID_PARAM;
      }
-@@ -294,7 +328,7 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcDecClose(void *openHandle)
+@@ -294,7 +340,7 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcDecClose(void *openHandle)
  
      pCTX->inter_buff_status = MFC_USE_NONE;
  
@@ -96,23 +108,35 @@ index 6c64ef8..cf7d780 100644
      free(pCTX);
  
 diff --git a/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/enc/src/SsbSipMfcEncAPI.c b/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/enc/src/SsbSipMfcEncAPI.c
-index a27fcc0..1e6f244 100644
+index a27fcc0..c587aba 100644
 --- a/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/enc/src/SsbSipMfcEncAPI.c
 +++ b/exynos3/s5pc110/sec_mm/sec_omx/sec_codecs/video/mfc_c110/enc/src/SsbSipMfcEncAPI.c
-@@ -30,6 +30,31 @@
+@@ -30,6 +30,43 @@
  
  #define _MFCLIB_MAGIC_NUMBER     0x92241001
  
 +static int logonce = 0;
++static int searched = 0;
++static int isnutella_max = 0;
 +
 +static int isNUTELLA_MAXMEM()
 +{
++    if(searched) return isnutella_max;
++    searched = 1;
 +    char kernel_version[255];
 +    FILE *proc_version = fopen ("/proc/version", "rt");
 +    fgets(kernel_version, 255, proc_version);
 +    fclose(proc_version);
-+    //ALOGI("%s\n",kernel_version);
-+    return (strcmp("NUTELLA-MAXMEM",kernel_version) < strlen(kernel_version));
++    int pos = 0;
++    while (pos < strlen(kernel_version) - 14)
++    {
++	if(strncmp("NUTELLA-MAXMEM",kernel_version + pos, 14) == 0)
++	{
++	    isnutella_max = 1;
++	}
++	pos = pos + 1;	 
++    }
++    return isnutella_max;
 +}
 +
 +static int get_MAX_ENCODER_OUTPUT_BUFFER_SIZE()
@@ -131,7 +155,7 @@ index a27fcc0..1e6f244 100644
  void *SsbSipMfcEncOpen(void *value)
  {
      int hMFCOpen;
-@@ -354,7 +379,7 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcEncInit(void *openHandle, void *param)
+@@ -354,7 +391,7 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcEncInit(void *openHandle, void *param)
  
      pCTX->virStrmBuf = EncArg.args.enc_init_mpeg4.out_u_addr.strm_ref_y;
      pCTX->phyStrmBuf = EncArg.args.enc_init_mpeg4.out_p_addr.strm_ref_y;
@@ -140,7 +164,7 @@ index a27fcc0..1e6f244 100644
      pCTX->encodedHeaderSize = EncArg.args.enc_init_mpeg4.out_header_size;
  
      pCTX->virMvRefYC = EncArg.args.enc_init_mpeg4.out_u_addr.mv_ref_yc;
-@@ -391,8 +416,8 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcEncExe(void *openHandle)
+@@ -391,8 +428,8 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcEncExe(void *openHandle)
          EncArg.args.enc_exe.in_strm_st = (unsigned int)pCTX->phyStrmBuf;
          EncArg.args.enc_exe.in_strm_end = (unsigned int)pCTX->phyStrmBuf + pCTX->sizeStrmBuf;
      } else {
@@ -151,7 +175,7 @@ index a27fcc0..1e6f244 100644
      }
  
      ret_code = ioctl(pCTX->hMFC, IOCTL_MFC_ENC_EXE, &EncArg);
-@@ -559,8 +584,8 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcEncGetOutBuf(void *openHandle, SSBSIP_MFC_ENC_OUT
+@@ -559,8 +596,8 @@ SSBSIP_MFC_ERROR_CODE SsbSipMfcEncGetOutBuf(void *openHandle, SSBSIP_MFC_ENC_OUT
          output_info->StrmPhyAddr = (void *)pCTX->phyStrmBuf;
          output_info->StrmVirAddr = (void *)pCTX->virStrmBuf;
      } else {
