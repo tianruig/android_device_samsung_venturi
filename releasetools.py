@@ -94,7 +94,7 @@ def FullOTA_Assertions(info):
 # Force clean install! Bypass all that persistence crap!
   info.script.AppendExtra('ui_print("Enforcing clean install...");')
   info.script.AppendExtra('run_program("/tmp/busybox", "umount","/system");')
-  info.script.AppendExtra('assert(run_program("/tmp/make_ext4fs", "-b", "4096", "-g", "32768", "-i", "8192", "-I", "256", "-a","/system", "/dev/lvpool/system") == 0);')
+  info.script.AppendExtra('run_program("/tmp/make_ext4fs", "-b", "4096", "-g", "32768", "-i", "8192", "-I", "256", "-a","/system", "/dev/lvpool/system");')
 
 def FullOTA_InstallEnd(info):
   info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
