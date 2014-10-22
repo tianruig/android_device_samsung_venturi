@@ -9,7 +9,7 @@ SYSTEM_SIZE='629145600' # 600M
 warn_repartition() {
     if ! /tmp/busybox test -e /.accept_wipe ; then
         /tmp/busybox touch /.accept_wipe
-        exit 9
+#        exit 9
     fi
     /tmp/busybox rm /.accept_wipe
 }

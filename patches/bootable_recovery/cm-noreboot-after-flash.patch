@@ -1,0 +1,47 @@
+diff --git a/edifyscripting.c b/edifyscripting.c
+index 5387c3a..8d75e34 100644
+--- a/edifyscripting.c
++++ b/edifyscripting.c
+@@ -306,6 +306,11 @@ static int run_script_from_buffer(char* script_data, int script_len, char* filen
+     return 0;
+ }
+ 
++int noreboot_file_exists() {
++    struct stat file_info;
++    return 0 == stat("/tmp/noreboot", &file_info);
++}
++
+ int extendedcommand_file_exists() {
+     struct stat file_info;
+     return 0 == stat(EXTENDEDCOMMAND_SCRIPT, &file_info);
+diff --git a/edifyscripting.h b/edifyscripting.h
+index acf9ceb..91aec44 100644
+--- a/edifyscripting.h
++++ b/edifyscripting.h
+@@ -19,6 +19,7 @@
+ 
+ int edify_main(int argc, char** argv);
+ int extendedcommand_file_exists();
++int noreboot_file_exists();
+ int run_and_remove_extendedcommand();
+ 
+-#endif // __EDIFYSCRIPTING_H
+\ No newline at end of file
++#endif // __EDIFYSCRIPTING_H
+diff --git a/recovery.c b/recovery.c
+index 619049b..cf21400 100644
+--- a/recovery.c
++++ b/recovery.c
+@@ -1140,8 +1140,10 @@ main(int argc, char **argv) {
+             LOGI("Running extendedcommand...\n");
+             int ret;
+             if (0 == (ret = run_and_remove_extendedcommand())) {
+-                status = INSTALL_SUCCESS;
+-                ui_set_show_text(0);
++		if(!noreboot_file_exists()) {
++                    status = INSTALL_SUCCESS;
++                    ui_set_show_text(0);
++		}
+             }
+             else {
+                 handle_failure(ret);

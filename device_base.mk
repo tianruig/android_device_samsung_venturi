@@ -203,6 +203,10 @@ PRODUCT_COPY_FILES += \
 	device/samsung/venturi/updater.sh:updater.sh \
 	device/samsung/venturi/restorecon.sh:restorecon.sh
 
+# Recovery Check files
+PRODUCT_COPY_FILES += \
+	device/samsung/venturi/recoverycheck.sh:recoverycheck.sh
+
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)
 
 PRODUCT_CHARACTERISTICS := tablet
