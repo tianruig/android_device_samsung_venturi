@@ -1,12 +1,15 @@
-#! /bin/bash
+#!/bin/bash
 THISDIR=$PWD
+UNATTENDED=${1}
 TOPDIR="$THISDIR/../../../../"
 echo $TOPDIR
-for LINE in $(ls -l | grep '^d' | awk '{ print $9 }')
+for LINE in $(echo $(find -name *.patch); echo $(find -name *.apply))
 do
-	clear
+	if [[ $UNATTENDED -ne 1 ]]; then
+		clear
+	fi
 	echo "clearing = $LINE"
-  	REPO=$(echo ${LINE//_//})
+  	REPO=$(dirname $LINE)
 	echo "repo = $TOPDIR$REPO"
 	cd $TOPDIR
 	cd $REPO
