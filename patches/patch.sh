@@ -50,8 +50,9 @@ do
 			break;
 		fi
 	fi
-	echo ""
-        echo ""
+        # Remove any .orig file created by patch. (.xml.orig can
+        # get picked up by the build!)
+        find -name *.orig | while read LINE; do rm $LINE; done
 	cd $THISDIR
 done
 
@@ -81,7 +82,5 @@ do
 			break;
 		fi
 	fi
-	echo ""
-        echo ""
 	cd $THISDIR
 done
