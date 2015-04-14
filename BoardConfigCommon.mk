@@ -41,6 +41,9 @@ BOARD_KERNEL_BASE := 0x30008000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_CMDLINE := console=ttyFIQ0,115200 init=/init no_console_suspend
 
+# External apps on SD
+TARGET_EXTERNAL_APPS = sdcard1
+
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/samsung/venturi
 

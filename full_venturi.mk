@@ -25,7 +25,7 @@ $(call inherit-product, device/samsung/venturi/device.mk)
 PRODUCT_LOCALES += hdpi
 
 # Discard inherited values and use our own instead.
-PRODUCT_NAME := full_venturi
+PRODUCT_NAME := carbon_venturi
 PRODUCT_DEVICE := venturi
 PRODUCT_BRAND := Samsung
 PRODUCT_MANUFACTURER := Samsung

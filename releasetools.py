@@ -25,6 +25,7 @@ UTILITIES_DIR = os.path.join(TARGET_DIR, 'utilities')
 def FullOTA_Assertions(info):
   info.output_zip.write(os.path.join(TARGET_DIR, "updater.sh"), "updater.sh")
   info.output_zip.write(os.path.join(TARGET_DIR, "restorecon.sh"), "restorecon.sh")
+  info.output_zip.write(os.path.join(TARGET_DIR, "recoverycheck.sh"), "recoverycheck.sh")
   info.output_zip.write(os.path.join(TARGET_DIR, "lvm/sbin/lvm"), "lvm/sbin/lvm")
   info.output_zip.write(os.path.join(TARGET_DIR, "lvm/etc/lvm.conf"), "lvm/etc/lvm.conf")
   info.output_zip.write(os.path.join(TARGET_DIR, "twrp.fstab"), "twrp.fstab")
@@ -33,17 +34,40 @@ def FullOTA_Assertions(info):
   info.output_zip.write(os.path.join(UTILITIES_DIR, "busybox"), "busybox")
 
   info.script.AppendExtra(
+        ('package_extract_file("busybox", "/tmp/busybox");\n'
+         'set_perm(0, 0, 0777, "/tmp/busybox");'))
+  info.script.AppendExtra(
+       ('package_extract_file("make_ext4fs", "/tmp/make_ext4fs");\n'
+        'set_perm(0, 0, 0777, "/tmp/make_ext4fs");'))
+  # Extract bootimage incase recovery needs to be updated
+  info.script.AppendExtra(
+        ('package_extract_file("boot.img", "/tmp/recoveryupdate.img");\n'
+         'set_perm(0, 0, 0777, "/tmp/recoveryupdate.img");'))
+  info.script.AppendExtra(
+        ('package_extract_file("recoverycheck.sh", "/tmp/recoverycheck.sh");\n'
+         'set_perm(0, 0, 0777, "/tmp/recoverycheck.sh");'))
+
+  info.script.AppendExtra('ui_print("");')
+  info.script.AppendExtra('ui_print("");')
+  info.script.AppendExtra('ui_print("===================================");')
+  info.script.AppendExtra('ui_print("IF a recovery update is needed     |");')
+  info.script.AppendExtra('ui_print("then an updated recovery will be   |");')
+  info.script.AppendExtra('ui_print("flashed and this device will       |");')
+  info.script.AppendExtra('ui_print("reboot to the new recovery in      |");')
+  info.script.AppendExtra('ui_print("approx 10 seconds. Then            |");')
+  info.script.AppendExtra('ui_print("installation will continue.        |");')
+  info.script.AppendExtra('ui_print("===================================");')
+  info.script.AppendExtra('ui_print("");')
+  info.script.AppendExtra('ui_print("");')
+
+  info.script.AppendExtra('assert(run_program("/tmp/recoverycheck.sh") == 0);')
+
+  info.script.AppendExtra(
         ('package_extract_file("updater.sh", "/tmp/updater.sh");\n'
          'set_perm(0, 0, 0777, "/tmp/updater.sh");'))
   info.script.AppendExtra(
         ('package_extract_file("restorecon.sh", "/tmp/restorecon.sh");\n'
          'set_perm(0, 0, 0777, "/tmp/restorecon.sh");'))
-  info.script.AppendExtra(
-       ('package_extract_file("make_ext4fs", "/tmp/make_ext4fs");\n'
-        'set_perm(0, 0, 0777, "/tmp/make_ext4fs");'))
-  info.script.AppendExtra(
-        ('package_extract_file("busybox", "/tmp/busybox");\n'
-         'set_perm(0, 0, 0777, "/tmp/busybox");'))
   #Copy temporary replacement fstab's to temp
   info.script.AppendExtra(
         ('package_extract_file("twrp.fstab", "/tmp/twrp.fstab");\n'
@@ -69,13 +93,7 @@ def FullOTA_Assertions(info):
   info.script.AppendExtra('ui_print("");')
   info.script.AppendExtra('ui_print("");')
   info.script.AppendExtra('ui_print("===================================");')
-  info.script.AppendExtra('ui_print("IF this ROMs partition layout is   |");')
-  info.script.AppendExtra('ui_print("incompatible, This installer will  |");')
-  info.script.AppendExtra('ui_print("error the first time you flash...  |");')
-  info.script.AppendExtra('ui_print("IN THAT CASE:                      |");')
-  info.script.AppendExtra('ui_print("Flash AGAIN and /system and /data  |");')
-  info.script.AppendExtra('ui_print("will be ERASED and installation    |");')
-  info.script.AppendExtra('ui_print("will continue as normal.           |");')
+  info.script.AppendExtra('ui_print("Creating LVMv2 Partitions          |");')
   info.script.AppendExtra('ui_print("===================================");')
   info.script.AppendExtra('ui_print("");')
   info.script.AppendExtra('ui_print("");')
@@ -94,7 +112,7 @@ def FullOTA_Assertions(info):
 # Force clean install! Bypass all that persistence crap!
   info.script.AppendExtra('ui_print("Enforcing clean install...");')
   info.script.AppendExtra('run_program("/tmp/busybox", "umount","/system");')
-  info.script.AppendExtra('assert(run_program("/tmp/make_ext4fs", "-b", "4096", "-g", "32768", "-i", "8192", "-I", "256", "-a","/system", "/dev/lvpool/system") == 0);')
+  info.script.AppendExtra('run_program("/tmp/make_ext4fs", "-b", "4096", "-g", "32768", "-i", "8192", "-I", "256", "-a","/system", "/dev/lvpool/system");')
 
 def FullOTA_InstallEnd(info):
   info.script.AppendExtra('assert(run_program("/tmp/restorecon.sh") == 0);')
